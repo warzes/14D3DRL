@@ -100,7 +100,6 @@ bool GameAppInit()
 	if (ShaderProgramStatus(shaderProgram, GL_VALIDATE_STATUS) != GL_TRUE)
 		return false;
 
-
 	glGenVertexArrays(1, &meshVAO);
 	glBindVertexArray(meshVAO);
 
@@ -122,8 +121,6 @@ bool GameAppInit()
 		glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, VERTEX_SIZE, (const GLvoid*)VERTEX_COLOR_OFFSET);
 		glEnableVertexAttribArray(colorLocation);
 	}
-
-
 
 	return true;
 }

@@ -21,6 +21,9 @@
     <ClCompile Include="OpenGLHeader.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="RenderResource.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -43,6 +46,9 @@
       <Filter>3rdparty</Filter>
     </ClInclude>
     <ClInclude Include="OpenGLHeader.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderResource.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
   </ItemGroup>

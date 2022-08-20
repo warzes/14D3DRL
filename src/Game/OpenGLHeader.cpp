@@ -2,6 +2,9 @@
 #include "OpenGLHeader.h"
 #include "Log.h"
 //-----------------------------------------------------------------------------
+// Texture
+PFNGLACTIVETEXTUREPROC glActiveTexture = nullptr;
+PFNGLGENERATEMIPMAPPROC glGenerateMipmap = nullptr;
 // VAO
 PFNGLGENVERTEXARRAYSPROC    glGenVertexArrays = nullptr;
 PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays = nullptr;
@@ -35,7 +38,16 @@ PFNGLENABLEVERTEXATTRIBARRAYPROC  glEnableVertexAttribArray = nullptr;
 PFNGLDISABLEVERTEXATTRIBARRAYPROC glDisableVertexAttribArray = nullptr;
 // Shaders uniforms
 PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = nullptr;
+PFNGLUNIFORM1IPROC          glUniform1i = nullptr;
+PFNGLUNIFORM1FPROC          glUniform1f = nullptr;
+PFNGLUNIFORM2FVPROC         glUniform2fv = nullptr;
+PFNGLUNIFORM3FPROC          glUniform3f = nullptr;
+PFNGLUNIFORM3FVPROC         glUniform3fv = nullptr;
+PFNGLUNIFORM4FVPROC         glUniform4fv = nullptr;
+PFNGLUNIFORMMATRIX3FVPROC   glUniformMatrix3fv = nullptr;
 PFNGLUNIFORMMATRIX4FVPROC   glUniformMatrix4fv = nullptr;
+// Draw command
+PFNGLDRAWELEMENTSBASEVERTEXPROC glDrawElementsBaseVertex = nullptr;
 //-----------------------------------------------------------------------------
 #define OPENGL_GET_PROC(p,n) \
 	n = (p)(void*)wglGetProcAddress(#n); \
@@ -48,6 +60,9 @@ PFNGLUNIFORMMATRIX4FVPROC   glUniformMatrix4fv = nullptr;
 //-----------------------------------------------------------------------------
 bool OpenGLInitExtensions()
 {
+	// Texture
+	OPENGL_GET_PROC(PFNGLACTIVETEXTUREPROC, glActiveTexture);
+	OPENGL_GET_PROC(PFNGLGENERATEMIPMAPPROC, glGenerateMipmap);
 	// VAO
 	OPENGL_GET_PROC(PFNGLGENVERTEXARRAYSPROC, glGenVertexArrays);
 	OPENGL_GET_PROC(PFNGLDELETEVERTEXARRAYSPROC, glDeleteVertexArrays);
@@ -81,7 +96,16 @@ bool OpenGLInitExtensions()
 	OPENGL_GET_PROC(PFNGLDISABLEVERTEXATTRIBARRAYPROC, glDisableVertexAttribArray);
 	// Shaders uniforms
 	OPENGL_GET_PROC(PFNGLGETUNIFORMLOCATIONPROC, glGetUniformLocation);
+	OPENGL_GET_PROC(PFNGLUNIFORM1IPROC, glUniform1i);
+	OPENGL_GET_PROC(PFNGLUNIFORM1FPROC, glUniform1f);
+	OPENGL_GET_PROC(PFNGLUNIFORM2FVPROC, glUniform2fv);
+	OPENGL_GET_PROC(PFNGLUNIFORM3FPROC, glUniform3f);
+	OPENGL_GET_PROC(PFNGLUNIFORM3FVPROC, glUniform3fv);
+	OPENGL_GET_PROC(PFNGLUNIFORM4FVPROC, glUniform4fv);
+	OPENGL_GET_PROC(PFNGLUNIFORMMATRIX3FVPROC, glUniformMatrix3fv);
 	OPENGL_GET_PROC(PFNGLUNIFORMMATRIX4FVPROC, glUniformMatrix4fv);
+	// Draw command
+	OPENGL_GET_PROC(PFNGLDRAWELEMENTSBASEVERTEXPROC, glDrawElementsBaseVertex);
 
 	return true;
 }

@@ -7,6 +7,7 @@
 
 #include <cassert>
 #include <string>
+#include <vector>
 
 //=============================================================================
 // WIN32
@@ -21,6 +22,11 @@
 #include <gl/GL.h>
 #include <glext.h>
 #include <wglext.h>
+
+#define GLM_FORCE_XYZW_ONLY
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "OpenGLHeader.h"
 
