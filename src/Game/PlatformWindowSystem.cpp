@@ -48,13 +48,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 		
 	case WM_CHAR:
-	{
-		const bool repeat = !!(lParam & 0x40000000);
-		const wchar_t c = (wchar_t)wParam;
-		swprintf_s(mesgt, L"WM_CHAR: %c\n", c);
-		OutputDebugString(mesgt);
-	}
-	break;
+	//{
+	//	const bool repeat = !!(lParam & 0x40000000);
+	//	const wchar_t c = (wchar_t)wParam;
+	//	swprintf_s(mesgt, L"WM_CHAR: %c\n", c);
+	//	OutputDebugString(mesgt);
+	//}
+		break;
 
 	case WM_KEYDOWN:
 		if (wParam == VK_UP || wParam == uint8_t('W')) SetKeyState(Key::Up, true);
@@ -85,7 +85,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 bool RegisterWindowClass()
 {
 	WNDCLASS wc = { };
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
 	wc.lpszClassName = CLASS_NAME;

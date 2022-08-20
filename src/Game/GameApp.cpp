@@ -1,153 +1,190 @@
 #include "stdafx.h"
-//-----------------------------------------------------------------------------
-extern int WindowWidth;
-extern int WindowHeight;
-//-----------------------------------------------------------------------------
+#include "RenderResource.h"
+#include "Camera.h"
+#include "DrawPrimitive.h"
+
+Camera camera;
+
+VertexArrayBuffer vao;
+VertexBuffer vertexBuf;
+VertexBuffer uvBuf;
+
+Texture2D texture;
+
+// Embedded vertex shader source.
 const char* g_sample_vs_src = R"(
 #version 330 core
 
-uniform mat4 projectionMatrix;
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexUV;
 
-in vec3 position;
-in vec3 color;
+out vec2 UV;
 
-out vec3 fragmentColor;
+uniform mat4 MVP;
 
-void main(void)
+void main()
 {
-	gl_Position   = projectionMatrix * vec4(position, 1.0);
-	fragmentColor = color;
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+	UV = vertexUV;
 }
 )";
 
+// Embedded fragment shader source.
 const char* g_sample_fs_src = R"(
 #version 330 core
 
-in vec3 fragmentColor;
+in vec2 UV;
 
-out vec4 color;
+out vec3 color;
 
-void main(void)
+uniform sampler2D myTextureSampler;
+
+void main()
 {
-	color = vec4(fragmentColor, 1.0);
+	color = texture( myTextureSampler, UV ).rgb;
 }
 )";
 
-constexpr int MESH_VERTEX_COUNT = 3;
-constexpr int VERTEX_SIZE = 6 * sizeof(float);
-
-constexpr int VERTEX_POSITION_OFFSET = 0;
-constexpr int VERTEX_COLOR_OFFSET = 3 * sizeof(float);
-
-GLuint shaderProgram = 0, vertexShader = 0, fragmentShader = 0;
-GLuint meshVAO = 0, meshVBO = 0;
-
-float projectionMatrix[16];
-GLint projectionMatrixLocation, positionLocation, colorLocation;
-
-constexpr float triangleMesh[MESH_VERTEX_COUNT * 6] =
-{
-	-1.0f, -1.0f, -2.0f, /* цвет: */ 1.0f, 0.0f, 0.0f,
-	 0.0f,  1.0f, -2.0f, /* цвет: */ 0.0f, 1.0f, 0.0f,
-	 1.0f, -1.0f, -2.0f, /* цвет: */ 0.0f, 0.0f, 1.0f
-};
-
-// построение перспективной матрицы
-void Matrix4Perspective(float* M, float fovy, float aspect, float znear, float zfar)
-{
-	const float f = 1 / tanf(fovy / 2);
-	const float A = (zfar + znear) / (znear - zfar);
-	const float B = (2 * zfar * znear) / (znear - zfar);
-
-	M[0] = f / aspect; M[1] = 0; M[2] = 0; M[3] = 0;
-	M[4] = 0;          M[5] = f; M[6] = 0; M[7] = 0;
-	M[8] = 0;          M[9] = 0; M[10] = A; M[11] = B;
-	M[12] = 0;          M[13] = 0; M[14] = -1; M[15] = 0;
-}
+ShaderProgram shaderProgram2;
+UniformVariable MatrixID;
+UniformVariable TextureID;
 //-----------------------------------------------------------------------------
 bool GameAppInit()
 {
-	shaderProgram = glCreateProgram();
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
-	glShaderSource(vertexShader, 1, (const GLchar**)&g_sample_vs_src, nullptr);
-	glCompileShader(vertexShader);
-	if (ShaderStatus(vertexShader, GL_COMPILE_STATUS) != GL_TRUE)
-		return false;
+	shaderProgram2.CreateFromMemories(g_sample_vs_src, g_sample_fs_src);
+	shaderProgram2.Bind();
+	MatrixID = shaderProgram2.GetUniformVariable("MVP");
+	TextureID = shaderProgram2.GetUniformVariable("myTextureSampler");
+	shaderProgram2.SetUniform(TextureID, 0);
 
-	glShaderSource(fragmentShader, 1, (const GLchar**)&g_sample_fs_src, nullptr);
-	glCompileShader(fragmentShader);
-	if (ShaderStatus(fragmentShader, GL_COMPILE_STATUS) != GL_TRUE)
-		return false;
+	Texture2DLoaderInfo textureLoaderInfo;
+	textureLoaderInfo.fileName = "../data/textures/1mx1m.png";
+	texture.CreateFromFiles(textureLoaderInfo);
 
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
+	static const GLfloat g_vertex_buffer_data[] = {
+		-1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f,-1.0f,
+		 1.0f,-1.0f,-1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,
+		 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		 1.0f,-1.0f, 1.0f
+	};
 
-	glLinkProgram(shaderProgram);
-	if (ShaderProgramStatus(shaderProgram, GL_LINK_STATUS) != GL_TRUE)
-		return false;
+	vertexBuf.Create(RenderResourceUsage::Static, 36, 3 * sizeof(float), g_vertex_buffer_data);
 
-	glUseProgram(shaderProgram);
+	static const GLfloat g_uv_buffer_data[] = {
+		0.000059f, 0.000004f,
+		0.000103f, 0.336048f,
+		0.335973f, 0.335903f,
+		1.000023f, 0.000013f,
+		0.667979f, 0.335851f,
+		0.999958f, 0.336064f,
+		0.667979f, 0.335851f,
+		0.336024f, 0.671877f,
+		0.667969f, 0.671889f,
+		1.000023f, 0.000013f,
+		0.668104f, 0.000013f,
+		0.667979f, 0.335851f,
+		0.000059f, 0.000004f,
+		0.335973f, 0.335903f,
+		0.336098f, 0.000071f,
+		0.667979f, 0.335851f,
+		0.335973f, 0.335903f,
+		0.336024f, 0.671877f,
+		1.000004f, 0.671847f,
+		0.999958f, 0.336064f,
+		0.667979f, 0.335851f,
+		0.668104f, 0.000013f,
+		0.335973f, 0.335903f,
+		0.667979f, 0.335851f,
+		0.335973f, 0.335903f,
+		0.668104f, 0.000013f,
+		0.336098f, 0.000071f,
+		0.000103f, 0.336048f,
+		0.000004f, 0.671870f,
+		0.336024f, 0.671877f,
+		0.000103f, 0.336048f,
+		0.336024f, 0.671877f,
+		0.335973f, 0.335903f,
+		0.667969f, 0.671889f,
+		1.000004f, 0.671847f,
+		0.667979f, 0.335851f
+	};
 
-	Matrix4Perspective(projectionMatrix, 45.0f, (float)WindowWidth / (float)WindowHeight, 0.5f, 5.0f);
+	uvBuf.Create(RenderResourceUsage::Static, 36, 2 * sizeof(float), g_uv_buffer_data);
 
-	projectionMatrixLocation = glGetUniformLocation(shaderProgram, "projectionMatrix");
-	if (projectionMatrixLocation != -1)
-		glUniformMatrix4fv(projectionMatrixLocation, 1, GL_TRUE, projectionMatrix);
-
-	glValidateProgram(shaderProgram);
-	if (ShaderProgramStatus(shaderProgram, GL_VALIDATE_STATUS) != GL_TRUE)
-		return false;
-
-	glGenVertexArrays(1, &meshVAO);
-	glBindVertexArray(meshVAO);
-
-	glGenBuffers(1, &meshVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
-
-	glBufferData(GL_ARRAY_BUFFER, MESH_VERTEX_COUNT * VERTEX_SIZE, triangleMesh, GL_STATIC_DRAW);
-
-	positionLocation = glGetAttribLocation(shaderProgram, "position");
-	if (positionLocation != -1)
+	std::vector<VertexAttribute> attribs =
 	{
-		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, VERTEX_SIZE, (const GLvoid*)VERTEX_POSITION_OFFSET);
-		glEnableVertexAttribArray(positionLocation);
-	}
-
-	colorLocation = glGetAttribLocation(shaderProgram, "color");
-	if (colorLocation != -1)
-	{
-		glVertexAttribPointer(colorLocation, 3, GL_FLOAT, GL_FALSE, VERTEX_SIZE, (const GLvoid*)VERTEX_COLOR_OFFSET);
-		glEnableVertexAttribArray(colorLocation);
-	}
-
+	{.size = 3, .type = GL_FLOAT, .normalized = false, .stride = 0, .pointer = (void*)0},
+	{.size = 2, .type = GL_FLOAT, .normalized = false, .stride = 0, .pointer = (void*)0},
+	};
+	vao.Create({ &vertexBuf, &uvBuf }, nullptr, attribs);
+	
 	return true;
 }
 //-----------------------------------------------------------------------------
 void GameAppUpdate()
 {
+	camera.SimpleMove(0.01f);
 }
 //-----------------------------------------------------------------------------
 void GameAppFrame()
 {
-	glUseProgram(shaderProgram);
-	glBindVertexArray(meshVAO);
-	glDrawArrays(GL_TRIANGLES, 0, MESH_VERTEX_COUNT);
+	glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
+	glm::mat4 ViewMatrix = camera.GetViewMatrix();
+	glm::mat4 RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2));
+	glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
+	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+	shaderProgram2.Bind();
+	shaderProgram2.SetUniform(MatrixID, MVP);
+	texture.Bind();
+	vao.Draw();
+	drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f),0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
 }
 //-----------------------------------------------------------------------------
 void GameAppClose()
 {
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteBuffers(1, &meshVBO);
-
-	glBindVertexArray(0);
-	glDeleteVertexArrays(1, &meshVAO);
-
-	glUseProgram(0);
-	glDeleteProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	vertexBuf.Destroy();
+	uvBuf.Destroy();
+	shaderProgram2.Destroy();
+	texture.Destroy();
+	vao.Destroy();
 }
 //-----------------------------------------------------------------------------
