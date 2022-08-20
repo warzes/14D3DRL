@@ -7,7 +7,13 @@ Camera camera;
 
 VertexArrayBuffer vao;
 VertexBuffer vertexBuf;
-VertexBuffer uvBuf;
+IndexBuffer indexBuf;
+
+struct vertex_t
+{
+	glm::vec3 position;
+	glm::vec2 texCoord;
+};
 
 Texture2D texture;
 
@@ -51,10 +57,10 @@ UniformVariable TextureID;
 //-----------------------------------------------------------------------------
 bool GameAppInit()
 {
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	shaderProgram2.CreateFromMemories(g_sample_vs_src, g_sample_fs_src);
 	shaderProgram2.Bind();
@@ -66,94 +72,59 @@ bool GameAppInit()
 	textureLoaderInfo.fileName = "../data/textures/1mx1m.png";
 	texture.CreateFromFiles(textureLoaderInfo);
 
-	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f,-1.0f,
-		 1.0f,-1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		 1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		 1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		 1.0f,-1.0f, 1.0f
+	vertex_t vertices[] = {
+		/* pos                  uvs */
+		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
+		{ { 1.0f, -1.0f, -1.0f},  {1.0f, 0.0f} },
+		{ { 1.0f,  1.0f, -1.0f},  {1.0f, 1.0f} },
+		{ {-1.0f,  1.0f, -1.0f},  {0.0f, 1.0f} },
+
+		{ {-1.0f, -1.0f,  1.0f},  {0.0f, 0.0f} },
+		{ { 1.0f, -1.0f,  1.0f},  {1.0f, 0.0f} },
+		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
+		{ {-1.0f,  1.0f,  1.0f},  {0.0f, 1.0f} },
+
+		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
+		{ {-1.0f,  1.0f, -1.0f},  {1.0f, 0.0f} },
+		{ {-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
+		{ {-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f} },
+
+		{ { 1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
+		{ { 1.0f,  1.0f, -1.0f},  {1.0f, 0.0f} },
+		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
+		{ { 1.0f, -1.0f,  1.0f},  {0.0f, 1.0f} },
+
+		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
+		{ {-1.0f, -1.0f,  1.0f},  {1.0f, 0.0f} },
+		{ { 1.0f, -1.0f,  1.0f},  {1.0f, 1.0f} },
+		{ { 1.0f, -1.0f, -1.0f},  {0.0f, 1.0f} },
+	
+		{ {-1.0f,  1.0f, -1.0f},  {0.0f, 0.0f} },
+		{ {-1.0f,  1.0f,  1.0f},  {1.0f, 0.0f} },
+		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
+		{ { 1.0f,  1.0f, -1.0f},  {0.0f, 1.0f} },
 	};
 
-	vertexBuf.Create(RenderResourceUsage::Static, 36, 3 * sizeof(float), g_vertex_buffer_data);
+	vertexBuf.Create(RenderResourceUsage::Static, 24, sizeof(vertex_t), vertices);
 
-	static const GLfloat g_uv_buffer_data[] = {
-		0.000059f, 0.000004f,
-		0.000103f, 0.336048f,
-		0.335973f, 0.335903f,
-		1.000023f, 0.000013f,
-		0.667979f, 0.335851f,
-		0.999958f, 0.336064f,
-		0.667979f, 0.335851f,
-		0.336024f, 0.671877f,
-		0.667969f, 0.671889f,
-		1.000023f, 0.000013f,
-		0.668104f, 0.000013f,
-		0.667979f, 0.335851f,
-		0.000059f, 0.000004f,
-		0.335973f, 0.335903f,
-		0.336098f, 0.000071f,
-		0.667979f, 0.335851f,
-		0.335973f, 0.335903f,
-		0.336024f, 0.671877f,
-		1.000004f, 0.671847f,
-		0.999958f, 0.336064f,
-		0.667979f, 0.335851f,
-		0.668104f, 0.000013f,
-		0.335973f, 0.335903f,
-		0.667979f, 0.335851f,
-		0.335973f, 0.335903f,
-		0.668104f, 0.000013f,
-		0.336098f, 0.000071f,
-		0.000103f, 0.336048f,
-		0.000004f, 0.671870f,
-		0.336024f, 0.671877f,
-		0.000103f, 0.336048f,
-		0.336024f, 0.671877f,
-		0.335973f, 0.335903f,
-		0.667969f, 0.671889f,
-		1.000004f, 0.671847f,
-		0.667979f, 0.335851f
+
+	uint16_t indices[] = {
+	   0, 1, 2,  0, 2, 3,
+	   6, 5, 4,  7, 6, 4,
+	   8, 9, 10,  8, 10, 11,
+	   14, 13, 12,  15, 14, 12,
+	   16, 17, 18,  16, 18, 19,
+	   22, 21, 20,  23, 22, 20
 	};
 
-	uvBuf.Create(RenderResourceUsage::Static, 36, 2 * sizeof(float), g_uv_buffer_data);
-
+	indexBuf.Create(RenderResourceUsage::Static, 36, sizeof(uint16_t), indices);
+	
 	std::vector<VertexAttribute> attribs =
 	{
-	{.size = 3, .type = GL_FLOAT, .normalized = false, .stride = 0, .pointer = (void*)0},
-	{.size = 2, .type = GL_FLOAT, .normalized = false, .stride = 0, .pointer = (void*)0},
+		{.size = 3, .type = GL_FLOAT, .normalized = false, .stride = sizeof(vertex_t), .pointer = (void*)offsetof(vertex_t, position)},
+		{.size = 2, .type = GL_FLOAT, .normalized = false, .stride = sizeof(vertex_t), .pointer = (void*)offsetof(vertex_t, texCoord)},
 	};
-	vao.Create({ &vertexBuf, &uvBuf }, nullptr, attribs);
+	vao.Create({ &vertexBuf }, &indexBuf, attribs);
 	
 	return true;
 }
@@ -182,7 +153,7 @@ void GameAppFrame()
 void GameAppClose()
 {
 	vertexBuf.Destroy();
-	uvBuf.Destroy();
+	indexBuf.Destroy();
 	shaderProgram2.Destroy();
 	texture.Destroy();
 	vao.Destroy();
