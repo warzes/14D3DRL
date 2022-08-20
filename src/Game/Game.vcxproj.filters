@@ -24,6 +24,12 @@
     <ClCompile Include="RenderResource.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInput.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -39,17 +45,17 @@
     <ClInclude Include="RenderDevice.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rdparty\glext.h">
-      <Filter>3rdparty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdparty\wglext.h">
-      <Filter>3rdparty</Filter>
-    </ClInclude>
     <ClInclude Include="OpenGLHeader.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="RenderResource.h">
       <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInput.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

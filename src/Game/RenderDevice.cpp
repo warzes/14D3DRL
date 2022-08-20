@@ -85,6 +85,15 @@ bool RenderDevice::Create()
 		return false;
 
 	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
+	glClearDepth(1.0f);
+
+	// Show current OpenGL and GLSL version
+	LogPrint("GL: OpenGL device information:");
+	LogPrint(("    > Vendor:   " + std::string((const char*)glGetString(GL_VENDOR))).c_str());
+	LogPrint(("    > Renderer: " + std::string((const char*)glGetString(GL_RENDERER))).c_str());
+	LogPrint(("    > Version:  " + std::string((const char*)glGetString(GL_VERSION))).c_str());
+	LogPrint(("    > GLSL:     " + std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION))).c_str());
 
 	return true;
 }
@@ -110,8 +119,6 @@ void RenderDevice::Destroy()
 void RenderDevice::Clear()
 {
 	glViewport(0, 0, WindowWidth, WindowHeight);
-	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
-	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 }

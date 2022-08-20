@@ -20,5 +20,6 @@ public:
 
 	bool Update();
 };
-
 extern WindowSystem* gWindowSystem;
+
+float GetScreenAspect();

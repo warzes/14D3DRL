@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlatformWindowSystem.h"
 #include "Log.h"
+#include "GameInput.h"
 #if defined(_WIN32)
 //-----------------------------------------------------------------------------
 constexpr wchar_t CLASS_NAME[] = L"GameWindow";
@@ -42,8 +43,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 1;
 
 	case WM_SIZE:
-		WindowWidth = LOWORD(lParam);
-		WindowHeight = HIWORD(lParam);
+		WindowWidth = std::max(1, (int)LOWORD(lParam));
+		WindowHeight = std::max(1, (int)HIWORD(lParam));
 		break;
 		
 	case WM_CHAR:
@@ -56,21 +57,27 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 
 	case WM_KEYDOWN:
-	{
-		const bool repeat = !!(lParam & 0x40000000);
-		const int vk = (int)(HIWORD(lParam) & 0x1FF);
-		swprintf_s(mesgt, L"WM_KEYDOWN: 0x%x\n", wParam);
-		OutputDebugString(mesgt);
-	}
-	break;
+		if (wParam == VK_UP || wParam == uint8_t('W')) SetKeyState(Key::Up, true);
+		if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, true);
+		if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, true);
+		if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, true);
+		if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, true);
+		if (wParam == uint8_t('X')) SetKeyState(Key::B, true);
+		if (wParam == uint8_t('C')) SetKeyState(Key::C, true);
+		//const bool repeat = !!(lParam & 0x40000000);
+		//const int vk = (int)(HIWORD(lParam) & 0x1FF);
+		//swprintf_s(mesgt, L"WM_KEYDOWN: 0x%x\n", wParam);
+		break;
 
 	case WM_KEYUP:
-	{
-		const int vk = (int)(HIWORD(lParam) & 0x1FF);
-		swprintf_s(mesgt, L"WM_KEYUP: 0x%x\n", wParam);
-		OutputDebugString(mesgt);
-	}
-	break;
+		if (wParam == VK_UP || wParam == uint8_t('W')) SetKeyState(Key::Up, false);
+		if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, false);
+		if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, false);
+		if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, false);
+		if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, false);
+		if (wParam == uint8_t('X')) SetKeyState(Key::B, false);
+		if (wParam == uint8_t('C')) SetKeyState(Key::C, false);
+		break;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
@@ -209,5 +216,10 @@ WindowSystem::WindowSystem()
 WindowSystem::~WindowSystem()
 {
 	gWindowSystem = nullptr;
+}
+//-----------------------------------------------------------------------------
+float GetScreenAspect()
+{
+	return (float)WindowWidth/(float)WindowHeight;
 }
 //-----------------------------------------------------------------------------

@@ -24,6 +24,7 @@ void LogPrint(const char* message)
 	__android_log_write(ANDROID_LOG_INFO, "SOKOL_APP", message);
 #else
 	puts(message);
+	OutputDebugStringA(message);
 #endif
 }
 //-----------------------------------------------------------------------------
