@@ -22,6 +22,8 @@
 #include <glext.h>
 #include <wglext.h>
 
+#include "OpenGLHeader.h"
+
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif

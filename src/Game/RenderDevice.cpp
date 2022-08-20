@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderDevice.h"
 #include "Log.h"
+#include "OpenGLHeader.h"
 //-----------------------------------------------------------------------------
 extern HWND hWnd;
 extern bool Fullscreen;
@@ -69,21 +70,10 @@ bool RenderDevice::Create()
 		return false;
 	}
 
-	int major, minor;
-	glGetIntegerv(GL_MAJOR_VERSION, &major);
-	glGetIntegerv(GL_MINOR_VERSION, &minor);
-	/*LOG_DEBUG("OpenGL render context information:\n"
-		"  Renderer       : %s\n"
-		"  Vendor         : %s\n"
-		"  Version        : %s\n"
-		"  GLSL version   : %s\n"
-		"  OpenGL version : %d.%d\n",
-		(const char*)glGetString(GL_RENDERER),
-		(const char*)glGetString(GL_VENDOR),
-		(const char*)glGetString(GL_VERSION),
-		(const char*)glGetString(GL_SHADING_LANGUAGE_VERSION),
-		major, minor
-	);*/
+	if (!OpenGLInitExtensions())
+		return false;
+
+	glEnable(GL_DEPTH_TEST);
 
 	return true;
 }
@@ -109,8 +99,10 @@ void RenderDevice::Destroy()
 void RenderDevice::Clear()
 {
 	glViewport(0, 0, WindowWidth, WindowHeight);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
+	glClearDepth(1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 }
 //-----------------------------------------------------------------------------
 void RenderDevice::Swap()
