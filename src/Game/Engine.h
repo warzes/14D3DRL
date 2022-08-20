@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlatformWindowSystem.h"
+#include "RenderDevice.h"
 
 class Engine
 {
@@ -9,8 +10,10 @@ public:
 	void Close();
 
 	bool Update();
-	void Frame();
+	void BeginFrame();
+	void EndFrame();
 
 private:
 	WindowSystem m_window;
+	RenderDevice m_renderDevice;
 };

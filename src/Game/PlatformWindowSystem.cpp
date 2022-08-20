@@ -3,20 +3,17 @@
 #include "Log.h"
 #if defined(_WIN32)
 //-----------------------------------------------------------------------------
-namespace
-{
-	constexpr wchar_t CLASS_NAME[] = L"GameWindow";
+constexpr wchar_t CLASS_NAME[] = L"GameWindow";
 
-	HINSTANCE hInstance = nullptr;
-	HWND hWnd = nullptr;
-	MSG msg = { };
-	bool WindowClose = false;
+HINSTANCE hInstance = nullptr;
+HWND hWnd = nullptr;
+MSG msg = { };
+bool WindowClose = false;
 
-	int WindowWidth = 0;
-	int WindowHeight = 0;
-	bool Fullscreen = false;
-	RECT StoredWindowRect = { 0 }; // used to restore window pos/size when toggling fullscreen => windowed
-}
+int WindowWidth = 0;
+int WindowHeight = 0;
+bool Fullscreen = false;
+RECT StoredWindowRect = { 0 }; // used to restore window pos/size when toggling fullscreen => windowed
 //-----------------------------------------------------------------------------
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -45,7 +42,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 1;
 
 	case WM_SIZE:
-		//WindowEventSize(/*width*/LOWORD(lParam), /*height*/HIWORD(lParam));
+		WindowWidth = LOWORD(lParam);
+		WindowHeight = HIWORD(lParam);
 		break;
 		
 	case WM_CHAR:
@@ -189,7 +187,7 @@ bool WindowSystem::Update()
 {
 	if (WindowClose) return false;
 
-	while (GetMessage(&msg, nullptr, 0, 0) > 0)
+	while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);

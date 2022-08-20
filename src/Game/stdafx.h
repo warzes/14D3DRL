@@ -18,6 +18,10 @@
 #endif // _WIN32
 //=============================================================================
 
+#include <gl/GL.h>
+#include <glext.h>
+#include <wglext.h>
+
 #if defined(_MSC_VER)
 #	pragma warning(pop)
 #endif

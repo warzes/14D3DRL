@@ -15,6 +15,9 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="RenderDevice.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -26,6 +29,15 @@
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Engine\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDevice.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\glext.h">
+      <Filter>3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\wglext.h">
+      <Filter>3rdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +58,12 @@
     </Filter>
     <Filter Include="Engine\Engine">
       <UniqueIdentifier>{74558624-afbb-4952-994b-4b8144a6fce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Renderer">
+      <UniqueIdentifier>{83740966-d0f1-4de0-bc8c-a7bd54927148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{1d7d567a-272c-4b6b-992e-8950c83b7bd0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

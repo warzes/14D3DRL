@@ -1,6 +1,10 @@
 ﻿#include "stdafx.h"
 #include "Engine.h"
 //-----------------------------------------------------------------------------
+#if defined(_MSC_VER)
+#	pragma comment( lib, "OpenGL32.lib" )
+#endif
+//-----------------------------------------------------------------------------
 bool GameAppInit();
 void GameAppUpdate();
 void GameAppFrame();
@@ -17,8 +21,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 			while (engine.Update())
 			{
 				GameAppUpdate();
+				engine.BeginFrame();
 				GameAppFrame();
-				engine.Frame();
+				engine.EndFrame();
 			}
 		}
 		GameAppClose();
