@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="PlatformWindowSystem.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="PlatformWindowSystem.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine\Engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{4e7d7fb4-92c1-4fd1-8399-60c4cdf31f11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{f30884a3-8446-4100-80f6-c123ff10df20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{191f1a7e-6173-4ec6-b48d-2d791072d2c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Platform">
+      <UniqueIdentifier>{4ab31c9d-c895-4458-9214-a5d0bd57d63b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base">
+      <UniqueIdentifier>{00b80bc4-4ba4-4a55-b630-e4f781a9465c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine">
+      <UniqueIdentifier>{74558624-afbb-4952-994b-4b8144a6fce4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
