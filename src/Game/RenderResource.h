@@ -251,3 +251,28 @@ private:
 	IndexBuffer* m_ibo = nullptr;
 	VertexBuffer* m_vbo = nullptr;
 };
+
+//=============================================================================
+// FrameBuffer
+//=============================================================================
+class FrameBuffer
+{
+public:
+	bool Create(int width, int height);
+	void Destroy();
+
+	void Bind();
+
+	void BindTextureBuffer();
+
+	static void MainFrameBufferBind();
+
+	bool IsValid() const { return m_id > 0 && m_texColorBuffer > 0 && m_rbo > 0; }
+
+private:
+	GLuint m_id = 0;
+	GLuint m_texColorBuffer = 0;
+	GLuint m_rbo = 0;
+	int m_width = 0;
+	int m_height = 0;
+};

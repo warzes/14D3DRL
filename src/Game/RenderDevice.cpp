@@ -53,17 +53,13 @@ bool RenderDevice::Create()
 		return false;
 	}
 
-	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = reinterpret_cast<PFNWGLCREATECONTEXTATTRIBSARBPROC>(
-		wglGetProcAddress("wglCreateContextAttribsARB"));
-
-	wglMakeCurrent(nullptr, nullptr);
-	wglDeleteContext(hRCTemp);
-
-	if (!wglCreateContextAttribsARB)
+	if (!gladLoaderLoadWGL(hDC))
 	{
-		LogFatal("wglCreateContextAttribsARB fail");
+		LogFatal("gladLoaderLoadWGL fail");
 		return false;
 	}
+	wglMakeCurrent(nullptr, nullptr);
+	wglDeleteContext(hRCTemp);
 
 	constexpr int attribs[] =
 	{
@@ -81,8 +77,12 @@ bool RenderDevice::Create()
 		return false;
 	}
 
-	if (!OpenGLInitExtensions())
+	if (!gladLoaderLoadGL())
+	{
+		LogFatal("gladLoadGL fail");
 		return false;
+	}
+		
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);

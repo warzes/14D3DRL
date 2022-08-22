@@ -33,6 +33,12 @@
     <ClCompile Include="DrawPrimitive.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rdparty\glad\gl.c">
+      <Filter>3rdparty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdparty\glad\wgl.c">
+      <Filter>3rdparty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -62,6 +68,12 @@
     </ClInclude>
     <ClInclude Include="DrawPrimitive.h">
       <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\glad\wgl.h">
+      <Filter>3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rdparty\glad\gl.h">
+      <Filter>3rdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

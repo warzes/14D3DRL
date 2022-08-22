@@ -564,4 +564,65 @@ void VertexArrayBuffer::UnBind()
 	currentVAO = 0;
 	glBindVertexArray(0);
 }
+//=============================================================================
+bool FrameBuffer::Create(int width, int height)
+{
+	m_width = width;
+	m_height = height;
+	glGenFramebuffers(1, &m_id);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
+
+	glGenTextures(1, &m_texColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, m_texColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // TODO: GL_LINEAR 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	Texture2D::UnBind(); // TODO:
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texColorBuffer, 0);
+
+	glGenRenderbuffers(1, &m_rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rbo);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LogError("Framebuffer is not complete!");
+		return false;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	return true;
+}
+//-----------------------------------------------------------------------------
+void FrameBuffer::Destroy()
+{
+	glDeleteTextures(1, &m_texColorBuffer);
+	glDeleteRenderbuffers(1, &m_rbo);
+	glDeleteFramebuffers(1, &m_id);
+	m_id = 0;
+}
+//-----------------------------------------------------------------------------
+void FrameBuffer::Bind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glViewport(0, 0, m_width, m_height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+}
+//-----------------------------------------------------------------------------
+void FrameBuffer::MainFrameBufferBind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+//-----------------------------------------------------------------------------
+void FrameBuffer::BindTextureBuffer()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_texColorBuffer);
+}
 //-----------------------------------------------------------------------------

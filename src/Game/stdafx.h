@@ -19,9 +19,10 @@
 #endif // _WIN32
 //=============================================================================
 
-#include <gl/GL.h>
-#include <glext.h>
-#include <wglext.h>
+#include <glad/gl.h>
+#if defined(_WIN32)
+#	include <glad/wgl.h>
+#endif
 
 #define GLM_FORCE_XYZW_ONLY
 #include <glm/glm.hpp>
