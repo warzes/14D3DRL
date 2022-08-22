@@ -58,12 +58,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 		if (wParam == VK_UP || wParam == uint8_t('W')) SetKeyState(Key::Up, true);
-		if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, true);
-		if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, true);
-		if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, true);
-		if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, true);
-		if (wParam == uint8_t('X')) SetKeyState(Key::B, true);
-		if (wParam == uint8_t('C')) SetKeyState(Key::C, true);
+		else if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, true);
+		else if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, true);
+		else if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, true);
+		else if (wParam == uint8_t('Q')) SetKeyState(Key::StrafeLeft, true);
+		else if (wParam == uint8_t('E')) SetKeyState(Key::StrafeRight, true);
+		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, true);
+		else if (wParam == uint8_t('X')) SetKeyState(Key::B, true);
+		else if (wParam == uint8_t('C')) SetKeyState(Key::C, true);
 		//const bool repeat = !!(lParam & 0x40000000);
 		//const int vk = (int)(HIWORD(lParam) & 0x1FF);
 		//swprintf_s(mesgt, L"WM_KEYDOWN: 0x%x\n", wParam);
@@ -71,12 +73,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYUP:
 		if (wParam == VK_UP || wParam == uint8_t('W')) SetKeyState(Key::Up, false);
-		if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, false);
-		if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, false);
-		if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, false);
-		if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, false);
-		if (wParam == uint8_t('X')) SetKeyState(Key::B, false);
-		if (wParam == uint8_t('C')) SetKeyState(Key::C, false);
+		else if (wParam == VK_DOWN || wParam == uint8_t('S')) SetKeyState(Key::Down, false);
+		else if (wParam == VK_LEFT || wParam == uint8_t('A')) SetKeyState(Key::Left, false);
+		else if (wParam == VK_RIGHT || wParam == uint8_t('D')) SetKeyState(Key::Right, false);
+		else if (wParam == uint8_t('Q')) SetKeyState(Key::StrafeLeft, false);
+		else if (wParam == uint8_t('E')) SetKeyState(Key::StrafeRight, false);
+		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, false);
+		else if (wParam == uint8_t('X')) SetKeyState(Key::B, false);
+		else if (wParam == uint8_t('C')) SetKeyState(Key::C, false);
 		break;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);

@@ -48,15 +48,23 @@ void Camera::SimpleMove(float deltaTime)
 	lastPosX = xpos;
 	lastPosY = ypos;
 
-	const float speedMod = 1.0f;
+
+
+	constexpr float speedMod = 1.0f;
 	if (IsKeyDown(Key::Up))
 		MoveForward(deltaTime, speedMod);
 	if (IsKeyDown(Key::Down))
 		MoveBackward(deltaTime, speedMod);
-	if (IsKeyDown(Key::Right))
+	if (IsKeyDown(Key::StrafeRight))
 		MoveRight(deltaTime, speedMod);
-	if (IsKeyDown(Key::Left))
+	if (IsKeyDown(Key::StrafeLeft))
 		MoveLeft(deltaTime, speedMod);
+
+	constexpr float speedRotateMod = 1600.0f;
+	if (IsKeyDown(Key::Right))
+		Rotate(speedRotateMod *deltaTime, 0.0f);
+	if (IsKeyDown(Key::Left))
+		Rotate(-speedRotateMod * deltaTime, 0.0f);
 
 	Update();
 }

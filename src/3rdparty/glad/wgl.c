@@ -30,8 +30,7 @@ static int glad_wgl_has_extension(HDC hdc, const char *ext) {
             break;
 
         terminator = loc + strlen(ext);
-        if((loc == extensions || *(loc - 1) == ' ') &&
-            (*terminator == ' ' || *terminator == '\0'))
+        if((loc == extensions || *(loc - 1) == ' ') && (*terminator == ' ' || *terminator == '\0'))
         {
             return 1;
         }
