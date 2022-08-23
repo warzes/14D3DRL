@@ -226,6 +226,7 @@
     <ClInclude Include="DrawPrimitive.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameInput.h" />
+    <ClInclude Include="GeometryMath.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Offscreen.h" />
     <ClInclude Include="OpenGLHeader.h" />

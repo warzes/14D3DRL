@@ -126,6 +126,9 @@
     <ClInclude Include="Tile.h">
       <Filter>GameData</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryMath.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

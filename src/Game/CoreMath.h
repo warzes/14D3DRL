@@ -116,3 +116,45 @@ inline Vector3 Vector3::CrossProduct(const Vector3& vector) const
 {
 	return { y * vector.z - z * vector.y, z * vector.x - x * vector.z, x * vector.y - y * vector.x };
 }
+
+//=============================================================================
+// Vector4
+//=============================================================================
+
+struct Vector4
+{
+public:
+	constexpr Vector4() = default;
+	constexpr Vector4(Vector4&&) = default;
+	constexpr Vector4(const Vector4&) = default;
+	constexpr Vector4(float n) : x(n), y(n), z(n), w(n) {}
+	constexpr Vector4(float nx, float ny, float nz, float nw) : x(nx), y(ny), z(nz), w(nw) {}
+
+	constexpr Vector4& operator=(Vector4&&) = default;
+	constexpr Vector4& operator=(const Vector4&) = default;
+
+	//bool operator==(const Vector4& a);
+	//bool operator!=(const Vector4& a);
+
+	float x = 0.0f;
+	float y = 0.0f;
+	float z = 0.0f;
+	float w = 0.0f;
+};
+
+//=============================================================================
+// Matrix4
+//=============================================================================
+
+struct Matrix4
+{
+public:
+	constexpr Matrix4() = default;
+	constexpr Matrix4(Matrix4&&) = default;
+	constexpr Matrix4(const Matrix4&) = default;
+
+	float& operator[](int Index) { return m[Index]; }
+	const float& operator[](int Index) const { return m[Index]; }
+
+	float m[16] = { 0.0f };
+};

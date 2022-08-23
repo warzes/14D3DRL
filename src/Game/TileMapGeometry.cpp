@@ -169,7 +169,13 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	const int cameraPosY = floor(camera.GetPosition().y);
 	const int cameraPosZ = floor(camera.GetPosition().z);
 
-	constexpr int viewDist = 80;
+	glm::mat4 vp = camera.GetProjectionMatrix() * camera.GetViewMatrix();
+
+
+	SimpleFrustum frustum;
+	frustum.Extract(camera.GetProjectionMatrix(), camera.GetViewMatrix());
+
+	constexpr int viewDist = 100;
 
 	// нужно по другому - нужно x,y,z  =равны камере - и увеличиваются до дистанции (ведь что влево, что вправо - логика одна, так зачем два шага цикла, если можно один и отзеркалить?
 
@@ -188,42 +194,46 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 					const float posZ = z - 1.0f;
 					const float posY = (float)y;
 
+					const Vector3 min = { posX - 0.5f, posZ - 0.5f, posY - 0.5f };
+					const Vector3 max = { posX + 0.5f, posZ + 0.5f, posY + 0.5f };
+					if (!frustum.AABBoxIn(min, max)) continue;
+
 					// задняя сторона
 					if (y == 0 || !tiles->tiles[z][x][y - 1])
 					{
-						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Back);
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, { posX, posZ, posY }, TileSide::Back);
 					}
 
 					// передняя сторона
 					if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
 					{
-						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Forward);
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, { posX, posZ, posY }, TileSide::Forward);
 					}
 
 					// левая сторона
 					if (x == 0 || !tiles->tiles[z][x - 1][y])
 					{
-						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Left);
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, { posX, posZ, posY }, TileSide::Left);
 					}
 
 					// правая
 					if (x == SizeMap-1 || !tiles->tiles[z][x + 1][y])
 					{
-						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Right);
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, { posX, posZ, posY }, TileSide::Right);
 					}
 
 					// вверх
 					if (cameraPosY > posZ)
 					{
 						if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
-							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, camera, { posX, posZ, posY }, TileSide::Top);
+							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, vp, { posX, posZ, posY }, TileSide::Top);
 					}
 						
 					// низ
 					if (cameraPosY < posZ)
 					{
 						if (z == 0 || !tiles->tiles[z - 1][x][y])
-							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, camera, { posX, posZ, posY }, TileSide::Bottom);
+							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, vp, { posX, posZ, posY }, TileSide::Bottom);
 					}
 				}
 			}
@@ -232,39 +242,35 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 #endif
 }
 //-----------------------------------------------------------------------------
-void TileMapGeometry::drawSide(Texture2D* texture, const Camera& camera, const Vector3& pos, TileSide side)
+void TileMapGeometry::drawSide(Texture2D* texture, const glm::mat4& VP, const Vector3& pos, TileSide side)
 {
 	texture->Bind();
 
-	glm::mat4 RotateMatrix;
+	glm::mat4 ModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, pos.z));
+
 	switch (side)
 	{
 	case TileSide::Top:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		break;
 	case TileSide::Bottom:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		break;
 	case TileSide::Forward:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		break;
 	case TileSide::Back:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		break;
 	case TileSide::Left:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		break;
 	case TileSide::Right:
-		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		break;
-	default:
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		break;
 	}	
-	glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, pos.z));
-	glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
-	glm::mat4 MVP = camera.GetProjectionMatrix() * camera.GetViewMatrix() * ModelMatrix;
 
-	m_shaderProgram.SetUniform(m_MatrixID, MVP);
+	m_shaderProgram.SetUniform(m_MatrixID, VP * ModelMatrix);
 	m_vao.Draw();
 }
 //-----------------------------------------------------------------------------

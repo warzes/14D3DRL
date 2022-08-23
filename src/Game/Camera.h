@@ -1,30 +1,6 @@
 #pragma once
 
-struct Plane
-{
-	Plane() = default;
-	Plane(const glm::vec3& p1, const glm::vec3& norm) : normal(glm::normalize(norm)), distance(glm::dot(normal, p1)) {}
-
-	float GetSignedDistanceToPlan(const glm::vec3& point) const
-	{
-		return glm::dot(normal, point) - distance;
-	}
-
-	glm::vec3 normal = { 0.0f, 1.0f, 0.0f }; // unit vector
-	float distance = 0.0f;                   // Distance with origin
-};
-
-struct Frustum
-{
-	Plane topFace;
-	Plane bottomFace;
-
-	Plane rightFace;
-	Plane leftFace;
-
-	Plane farFace;
-	Plane nearFace;
-};
+#include "GeometryMath.h"
 
 class Camera
 {
