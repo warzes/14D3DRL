@@ -11,6 +11,7 @@
 #include <cassert>
 #include <chrono>
 #include <string>
+#include <array>
 #include <vector>
 #include <unordered_map>
 //=============================================================================
