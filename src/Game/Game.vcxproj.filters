@@ -39,6 +39,12 @@
     <ClCompile Include="..\3rdparty\glad\wgl.c">
       <Filter>3rdparty</Filter>
     </ClCompile>
+    <ClCompile Include="PlatformUtility.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformInputSystem.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -75,6 +81,15 @@
     <ClInclude Include="..\3rdparty\glad\gl.h">
       <Filter>3rdparty</Filter>
     </ClInclude>
+    <ClInclude Include="CoreMath.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformUtility.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformInputSystem.h">
+      <Filter>Engine\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -100,6 +115,9 @@
     </Filter>
     <Filter Include="3rdparty">
       <UniqueIdentifier>{1d7d567a-272c-4b6b-992e-8950c83b7bd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math">
+      <UniqueIdentifier>{4eab45ba-546f-4965-b226-442ed25676c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

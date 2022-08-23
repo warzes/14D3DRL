@@ -46,7 +46,7 @@ int gladLoadWGLUserPtr(HDC hdc, GLADuserptrloadfunc load, void *userptr) {
     if(wglGetExtensionsStringARB == NULL && wglGetExtensionsStringEXT == NULL) return 0;
 
     if (!glad_wgl_has_extension(hdc, "WGL_ARB_create_context")) return 0;
-    if (!glad_wgl_has_extension(hdc, "WGL_ARB_create_context_no_error")) return 0;
+    /*if (!*/glad_wgl_has_extension(hdc, "WGL_ARB_create_context_no_error")/*) return 0*/; // отсутствует на intel hd со старыми драйверами
     if (!glad_wgl_has_extension(hdc, "WGL_ARB_create_context_profile")) return 0;
     if (!glad_wgl_has_extension(hdc, "WGL_ARB_extensions_string")) return 0;
     if (!glad_wgl_has_extension(hdc, "WGL_EXT_extensions_string")) return 0;

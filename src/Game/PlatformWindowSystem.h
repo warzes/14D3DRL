@@ -4,9 +4,10 @@ struct WindowSystemCreateInfo
 {
 	int Width = 1024;
 	int Height = 768;
-	const wchar_t* Title = L"Game";
+	const char* Title = "Game";
 
-	bool fullscreen = false;
+	bool HighDpi = false;
+	bool Fullscreen = false;
 };
 
 class WindowSystem
