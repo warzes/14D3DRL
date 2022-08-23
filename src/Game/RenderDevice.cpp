@@ -84,7 +84,9 @@ bool RenderDevice::Create()
 		LogFatal("gladLoadGL fail");
 		return false;
 	}
-		
+
+
+	wglSwapIntervalEXT(0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);

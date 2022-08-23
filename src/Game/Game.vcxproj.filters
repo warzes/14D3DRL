@@ -57,6 +57,9 @@
     <ClCompile Include="Offscreen.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>GameData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />

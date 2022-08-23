@@ -5,6 +5,7 @@
 #include "CoreMath.h"
 
 class Camera;
+class TilesCell;
 
 class TileMapGeometry
 {
@@ -12,10 +13,10 @@ public:
 	bool Init();
 	void Close();
 
-	void Draw(const Camera& camera);
+	void Draw(const Camera& camera, TilesCell* tiles);
 
 private:
-	void drawSide(const Camera& camera, const Vector3& pos, TileSide side);
+	void drawSide(Texture2D* texture, const Camera& camera, const Vector3& pos, TileSide side);
 
 	VertexArrayBuffer m_vao;
 	VertexBuffer m_vertexBuf;
@@ -23,6 +24,4 @@ private:
 	ShaderProgram m_shaderProgram;
 	UniformVariable m_MatrixID;
 	UniformVariable m_TextureID;
-
-	Texture2D* tex;
 };

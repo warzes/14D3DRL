@@ -79,8 +79,8 @@ uniform sampler2D screenTexture;
 
 void main()
 {
-	//float PixelsX = 80.0;
-	//float PixelsY = 60.0;
+	//float PixelsX = 320.0;
+	//float PixelsY = 240.0;
 	//vec2 pos;
 	//pos.x = floor(UV.x * PixelsX) / PixelsX;
 	//pos.y = floor(UV.y * PixelsY) / PixelsY;
@@ -133,7 +133,7 @@ void Offscreen::Close()
 //-----------------------------------------------------------------------------
 void Offscreen::Bind()
 {
-	m_fb.Bind();
+	m_fb.Bind({0.1, 0.3, 0.6});
 }
 //-----------------------------------------------------------------------------
 void Offscreen::DrawToScreen()

@@ -1,9 +1,21 @@
-#pragma once
+﻿#pragma once
+
+/*
+идея такая - карта разбита на ячейки, каждая ячейка содержит тайлы. Ячейки хранятся в файлах и выгружаются/загружаются по необходимости
+*/
 
 #include "TileMapGeometry.h"
 
-constexpr int SizeMap = 10000;
+constexpr int SizeMap = 100;
 constexpr int SizeMapZ = 3;
+
+
+struct TilesCell
+{
+	Tile* tiles[SizeMapZ][SizeMap][SizeMap];
+};
+constexpr int TileSize = sizeof(Tile);
+constexpr int TilesGridSize = sizeof(TilesCell) / 1024 / 1024;
 
 class TileMap
 {
@@ -16,5 +28,5 @@ public:
 private:
 	TileMapGeometry m_tileGeometry;
 
-	std::array<std::array<std::array<Tile, SizeMapZ>, SizeMap>, SizeMap>* m_tiles;
+	TilesCell* m_tiles = nullptr;
 };

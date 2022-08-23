@@ -12,12 +12,6 @@ enum class TileSide
 	Right
 };
 
-enum class TileForm
-{
-	Air,
-	Wall
-};
-
 struct TileTemplate
 {
 	Texture2D* textureTop = nullptr;
@@ -26,10 +20,21 @@ struct TileTemplate
 	Texture2D* textureBack = nullptr;
 	Texture2D* textureLeft = nullptr;
 	Texture2D* textureRight = nullptr;
+
+	bool operator==(const TileTemplate& a) const;
 };
+
+class TileTemplateManager
+{
+public:
+	TileTemplate* AddTileTemplate(const TileTemplate& tileTemplate);
+private:
+	std::vector<TileTemplate> m_tiles;
+};
+
+extern TileTemplateManager gTileTemplateManager;
 
 struct Tile
 {
 	TileTemplate* tileTemplate = nullptr;
-	TileForm form = TileForm::Air; // тут чтобы можно было ломать стены
 };

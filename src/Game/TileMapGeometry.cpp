@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "TileMapGeometry.h"
 #include "Vertex.h"
-#include "TextureManager.h"
 #include "Camera.h"
 #include "DrawPrimitive.h"
 #include "Utility.h"
+#include "TileMap.h"
 #define DRAW_BOX_TEST 0
 //-----------------------------------------------------------------------------
 constexpr const char* vertexShaderSource = R"(
@@ -46,10 +46,9 @@ bool TileMapGeometry::Init()
 	m_TextureID = m_shaderProgram.GetUniformVariable("Texture0");
 	m_shaderProgram.SetUniform(m_TextureID, 0);
 
+#if DRAW_BOX_TEST
 	tex = gTextureManager->GetTexture2D("../data/textures/1mx1m.png");
 	if (!tex) return false;
-
-#if DRAW_BOX_TEST
 	constexpr Vertex_Pos3_TexCoord vertices[] = 
 	{
 		/* pos                  uvs */
@@ -125,7 +124,7 @@ void TileMapGeometry::Close()
 	m_vao.Destroy();
 }
 //-----------------------------------------------------------------------------
-void TileMapGeometry::Draw(const Camera& camera)
+void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 {
 #if DRAW_BOX_TEST
 	{
@@ -165,21 +164,77 @@ void TileMapGeometry::Draw(const Camera& camera)
 	drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
 #else
 	m_shaderProgram.Bind();
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Forward);
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Back);
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Left);
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Right);
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Top);
-	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Bottom);
+
+	const int cameraPosX = floor(camera.GetPosition().x);
+	const int cameraPosY = floor(camera.GetPosition().y);
+	const int cameraPosZ = floor(camera.GetPosition().z);
+
+	constexpr int viewDist = 80;
+
+	// нужно по другому - нужно x,y,z  =равны камере - и увеличиваются до дистанции (ведь что влево, что вправо - логика одна, так зачем два шага цикла, если можно один и отзеркалить?
+
+	for (int z = 0; z < SizeMapZ; z++)
+	{
+		for (int x = cameraPosX - viewDist; x < cameraPosX + viewDist; x++)
+		{
+			if (x < 0 || x >= SizeMap) continue;
+			for (int y = cameraPosZ - viewDist; y < cameraPosZ + viewDist; y++)
+			{
+				if (y < 0 || y >= SizeMap) continue;
+				if (!tiles->tiles[z][x][y] || !tiles->tiles[z][x][y]->tileTemplate) continue;
+
+				{
+					const float posX = (float)x;
+					const float posZ = z - 1.0f;
+					const float posY = (float)y;
+
+					// задняя сторона
+					if (y == 0 || !tiles->tiles[z][x][y - 1])
+					{
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Back);
+					}
+
+					// передняя сторона
+					if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
+					{
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Forward);
+					}
+
+					// левая сторона
+					if (x == 0 || !tiles->tiles[z][x - 1][y])
+					{
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Left);
+					}
+
+					// правая
+					if (x == SizeMap-1 || !tiles->tiles[z][x + 1][y])
+					{
+						drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, camera, { posX, posZ, posY }, TileSide::Right);
+					}
+
+					// вверх
+					if (cameraPosY > posZ)
+					{
+						if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
+							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, camera, { posX, posZ, posY }, TileSide::Top);
+					}
+						
+					// низ
+					if (cameraPosY < posZ)
+					{
+						if (z == 0 || !tiles->tiles[z - 1][x][y])
+							drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, camera, { posX, posZ, posY }, TileSide::Bottom);
+					}
+				}
+			}
+		}
+	}
 #endif
 }
 //-----------------------------------------------------------------------------
-void TileMapGeometry::drawSide(const Camera& camera, const Vector3& pos, TileSide side)
+void TileMapGeometry::drawSide(Texture2D* texture, const Camera& camera, const Vector3& pos, TileSide side)
 {
-	tex->Bind();
-
-	glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
-	glm::mat4 ViewMatrix = camera.GetViewMatrix();
+	texture->Bind();
 
 	glm::mat4 RotateMatrix;
 	switch (side)
@@ -207,7 +262,7 @@ void TileMapGeometry::drawSide(const Camera& camera, const Vector3& pos, TileSid
 	}	
 	glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, pos.z));
 	glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
-	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	glm::mat4 MVP = camera.GetProjectionMatrix() * camera.GetViewMatrix() * ModelMatrix;
 
 	m_shaderProgram.SetUniform(m_MatrixID, MVP);
 	m_vao.Draw();

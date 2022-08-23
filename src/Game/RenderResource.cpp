@@ -606,10 +606,10 @@ void FrameBuffer::Destroy()
 	m_id = 0;
 }
 //-----------------------------------------------------------------------------
-void FrameBuffer::Bind()
+void FrameBuffer::Bind(const glm::vec3& color)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(color.x, color.y, color.z, 1.0f);
 	glViewport(0, 0, m_width, m_height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);

@@ -7,6 +7,7 @@ extern "C" {
 PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
 PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB = NULL;
 PFNWGLGETEXTENSIONSSTRINGEXTPROC wglGetExtensionsStringEXT = NULL;
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 
 static int glad_wgl_has_extension(HDC hdc, const char *ext) {
     const char *terminator = NULL;
@@ -50,7 +51,10 @@ int gladLoadWGLUserPtr(HDC hdc, GLADuserptrloadfunc load, void *userptr) {
     if (!glad_wgl_has_extension(hdc, "WGL_ARB_create_context_profile")) return 0;
     if (!glad_wgl_has_extension(hdc, "WGL_ARB_extensions_string")) return 0;
     if (!glad_wgl_has_extension(hdc, "WGL_EXT_extensions_string")) return 0;
+    if (!glad_wgl_has_extension(hdc, "WGL_EXT_swap_control")) return 0;
+
     wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)load(userptr, "wglCreateContextAttribsARB");
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)load(userptr, "wglSwapIntervalEXT");
 
     return GLAD_MAKE_VERSION(1, 0);
 }

@@ -261,7 +261,7 @@ public:
 	bool Create(int width, int height);
 	void Destroy();
 
-	void Bind();
+	void Bind(const glm::vec3& color);
 
 	void BindTextureBuffer();
 
