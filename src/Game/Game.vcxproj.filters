@@ -117,6 +117,12 @@
     <ClInclude Include="Offscreen.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

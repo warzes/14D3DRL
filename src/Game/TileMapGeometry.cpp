@@ -4,9 +4,10 @@
 #include "TextureManager.h"
 #include "Camera.h"
 #include "DrawPrimitive.h"
+#include "Utility.h"
+#define DRAW_BOX_TEST 0
 //-----------------------------------------------------------------------------
-// Embedded vertex shader source.
-const char* g_sample_vs_src = R"(
+constexpr const char* vertexShaderSource = R"(
 #version 330 core
 
 layout(location = 0) in vec3 vertexPosition_modelspace;
@@ -22,9 +23,7 @@ void main()
 	UV = vertexUV;
 }
 )";
-
-// Embedded fragment shader source.
-const char* g_sample_fs_src2 = R"(
+constexpr const char* fragmentShaderSource = R"(
 #version 330 core
 
 in vec2 UV;
@@ -41,16 +40,18 @@ void main()
 //-----------------------------------------------------------------------------
 bool TileMapGeometry::Init()
 {
-	shaderProgram2.CreateFromMemories(g_sample_vs_src, g_sample_fs_src2);
-	shaderProgram2.Bind();
-	MatrixID = shaderProgram2.GetUniformVariable("MVP");
-	TextureID = shaderProgram2.GetUniformVariable("Texture0");
-	shaderProgram2.SetUniform(TextureID, 0);
+	m_shaderProgram.CreateFromMemories(vertexShaderSource, fragmentShaderSource);
+	m_shaderProgram.Bind();
+	m_MatrixID = m_shaderProgram.GetUniformVariable("MVP");
+	m_TextureID = m_shaderProgram.GetUniformVariable("Texture0");
+	m_shaderProgram.SetUniform(m_TextureID, 0);
 
-	tex = gTextureManager->GetTexture2D("../data/textures/1.png");
+	tex = gTextureManager->GetTexture2D("../data/textures/1mx1m.png");
 	if (!tex) return false;
 
-	Vertex_Pos3_TexCoord vertices[] = {
+#if DRAW_BOX_TEST
+	constexpr Vertex_Pos3_TexCoord vertices[] = 
+	{
 		/* pos                  uvs */
 		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
 		{ { 1.0f, -1.0f, -1.0f},  {1.0f, 0.0f} },
@@ -83,9 +84,7 @@ bool TileMapGeometry::Init()
 		{ { 1.0f,  1.0f, -1.0f},  {0.0f, 1.0f} },
 	};
 
-	m_vertexBuf.Create(RenderResourceUsage::Static, 24, sizeof(Vertex_Pos3_TexCoord), vertices);
-
-	uint16_t indices[] = {
+	constexpr uint16_t indices[] = {
 	   0, 1, 2,  0, 2, 3,
 	   6, 5, 4,  7, 6, 4,
 	   8, 9, 10,  8, 10, 11,
@@ -93,8 +92,20 @@ bool TileMapGeometry::Init()
 	   16, 17, 18,  16, 18, 19,
 	   22, 21, 20,  23, 22, 20
 	};
+#else
+	constexpr Vertex_Pos3_TexCoord vertices[] =
+	{
+		/* pos                     uvs */
+		{ {-0.5f, -0.5f, 0.5f},  {0.0f, 0.0f} },
+		{ { 0.5f, -0.5f, 0.5f},  {1.0f, 0.0f} },
+		{ { 0.5f,  0.5f, 0.5f},  {1.0f, 1.0f} },
+		{ {-0.5f,  0.5f, 0.5f},  {0.0f, 1.0f} },		
+	};
+	constexpr uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
-	m_indexBuf.Create(RenderResourceUsage::Static, 36, sizeof(uint16_t), indices);
+#endif
+	m_vertexBuf.Create(RenderResourceUsage::Static, Countof(vertices), sizeof(Vertex_Pos3_TexCoord), vertices);
+	m_indexBuf.Create(RenderResourceUsage::Static, Countof(indices), sizeof(uint16_t), indices);
 
 	std::vector<VertexAttribute> attribs =
 	{
@@ -110,47 +121,95 @@ void TileMapGeometry::Close()
 {
 	m_vertexBuf.Destroy();
 	m_indexBuf.Destroy();
-	shaderProgram2.Destroy();
+	m_shaderProgram.Destroy();
 	m_vao.Destroy();
 }
 //-----------------------------------------------------------------------------
 void TileMapGeometry::Draw(const Camera& camera)
 {
-	glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
-	glm::mat4 ViewMatrix = camera.GetViewMatrix();
-	glm::mat4 RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -4));
-	glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
-	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-	shaderProgram2.Bind();
-	shaderProgram2.SetUniform(MatrixID, MVP);
-	tex->Bind();
-	m_vao.Draw();
-
+#if DRAW_BOX_TEST
 	{
+		tex->Bind();
+		m_shaderProgram.Bind();
+		glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
+		glm::mat4 ViewMatrix = camera.GetViewMatrix();
+		glm::mat4 RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -4));
+		glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
+		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+		m_shaderProgram.SetUniform(m_MatrixID, MVP);
+		m_vao.Draw();
+
 		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(2, 0, -2));
 		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		shaderProgram2.SetUniform(MatrixID, MVP);
+		m_shaderProgram.SetUniform(m_MatrixID, MVP);
 		m_vao.Draw();
 
 		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2, 0, -2));
 		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		shaderProgram2.SetUniform(MatrixID, MVP);
+		m_shaderProgram.SetUniform(m_MatrixID, MVP);
 		m_vao.Draw();
 
 
 		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-4, 0, 0));
 		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		shaderProgram2.SetUniform(MatrixID, MVP);
+		m_shaderProgram.SetUniform(m_MatrixID, MVP);
 		m_vao.Draw();
 
 		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(4, 0, 0));
 		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		shaderProgram2.SetUniform(MatrixID, MVP);
+		m_shaderProgram.SetUniform(m_MatrixID, MVP);
 		m_vao.Draw();
 	}
-
 	drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
+#else
+	m_shaderProgram.Bind();
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Forward);
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Back);
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Left);
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Right);
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Top);
+	drawSide(camera, { 0.0f, 0.0f, 0.0f }, TileSide::Bottom);
+#endif
+}
+//-----------------------------------------------------------------------------
+void TileMapGeometry::drawSide(const Camera& camera, const Vector3& pos, TileSide side)
+{
+	tex->Bind();
+
+	glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
+	glm::mat4 ViewMatrix = camera.GetViewMatrix();
+
+	glm::mat4 RotateMatrix;
+	switch (side)
+	{
+	case TileSide::Top:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		break;
+	case TileSide::Bottom:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		break;
+	case TileSide::Forward:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		break;
+	case TileSide::Back:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		break;
+	case TileSide::Left:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		break;
+	case TileSide::Right:
+		RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		break;
+	default:
+		break;
+	}	
+	glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, pos.z));
+	glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
+	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+	m_shaderProgram.SetUniform(m_MatrixID, MVP);
+	m_vao.Draw();
 }
 //-----------------------------------------------------------------------------
