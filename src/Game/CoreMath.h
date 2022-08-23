@@ -7,14 +7,14 @@
 struct Vector2
 {
 public:
-	Vector2() = default;
-	Vector2(Vector2&&) = default;
-	Vector2(const Vector2&) = default;
-	Vector2(float n) : x(n), y(n) {}
-	Vector2(float nx, float ny) : x(nx), y(ny) {}
+	constexpr Vector2() = default;
+	constexpr Vector2(Vector2&&) = default;
+	constexpr Vector2(const Vector2&) = default;
+	constexpr Vector2(float n) : x(n), y(n) {}
+	constexpr Vector2(float nx, float ny) : x(nx), y(ny) {}
 
-	Vector2& operator=(Vector2&&) = default;
-	Vector2& operator=(const Vector2&) = default;
+	constexpr Vector2& operator=(Vector2&&) = default;
+	constexpr Vector2& operator=(const Vector2&) = default;
 
 	//bool operator==(const Vector2& a);
 	//bool operator!=(const Vector2& a);
@@ -40,7 +40,7 @@ public:
 	float y = 0.0f;
 };
 
-float Vector2::GetLength() const
+inline float Vector2::GetLength() const
 {
 	return sqrtf(x * x + y * y);
 }
@@ -63,14 +63,14 @@ inline float Vector2::DotProduct(const Vector2& a) const
 struct Vector3
 {
 public:
-	Vector3() = default;
-	Vector3(Vector3&&) = default;
-	Vector3(const Vector3&) = default;
-	Vector3(float n) : x(n), y(n), z(n) {}
-	Vector3(float nx, float ny, float nz) : x(nx), y(ny), z(nz) {}
+	constexpr Vector3() = default;
+	constexpr Vector3(Vector3&&) = default;
+	constexpr Vector3(const Vector3&) = default;
+	constexpr Vector3(float n) : x(n), y(n), z(n) {}
+	constexpr Vector3(float nx, float ny, float nz) : x(nx), y(ny), z(nz) {}
 
-	Vector3& operator=(Vector3&&) = default;
-	Vector3& operator=(const Vector3&) = default;
+	constexpr Vector3& operator=(Vector3&&) = default;
+	constexpr Vector3& operator=(const Vector3&) = default;
 
 	//bool operator==(const Vector3& a);
 	//bool operator!=(const Vector3& a);
@@ -96,7 +96,7 @@ public:
 	float z = 0.0f;
 };
 
-float Vector3::GetLength() const
+inline float Vector3::GetLength() const
 {
 	return sqrtf(x * x + y * y + z * z);
 }

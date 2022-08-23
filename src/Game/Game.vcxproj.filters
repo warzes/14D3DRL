@@ -51,6 +51,12 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="TileMapGeometry.cpp">
+      <Filter>GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="Offscreen.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -101,6 +107,15 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapGeometry.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Offscreen.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
