@@ -175,7 +175,7 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	SimpleFrustum frustum;
 	frustum.Extract(camera.GetProjectionMatrix(), camera.GetViewMatrix());
 
-	constexpr int viewDist = 100;
+	constexpr int viewDist = 20;
 
 	// нужно по другому - нужно x,y,z  =равны камере - и увеличиваются до дистанции (ведь что влево, что вправо - логика одна, так зачем два шага цикла, если можно один и отзеркалить?
 
