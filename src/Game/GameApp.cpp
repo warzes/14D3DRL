@@ -260,9 +260,9 @@ bool GameAppInit()
 	return true;
 }
 //-----------------------------------------------------------------------------
-void GameAppUpdate()
+void GameAppUpdate(float deltaTime)
 {
-	camera.SimpleMove(0.01f);
+	camera.SimpleMove(deltaTime);
 }
 //-----------------------------------------------------------------------------
 void GameAppFrame()

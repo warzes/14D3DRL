@@ -33,7 +33,7 @@
 
 //-----------------------------------------------------------------------------
 bool GameAppInit();
-void GameAppUpdate();
+void GameAppUpdate(float deltaTime);
 void GameAppFrame();
 void GameAppClose();
 //-----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 		{
 			while (engine.Update())
 			{
-				GameAppUpdate();
+				GameAppUpdate(engine.GetDeltaTime());
 				engine.BeginFrame();
 				GameAppFrame();
 				engine.EndFrame();
