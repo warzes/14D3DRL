@@ -2,6 +2,7 @@
 
 #include "PlatformWindowSystem.h"
 #include "RenderDevice.h"
+#include "TextureManager.h"
 
 class Engine
 {
@@ -18,4 +19,6 @@ public:
 private:
 	WindowSystem m_window;
 	RenderDevice m_renderDevice;
+
+	TextureManager m_textureManager;
 };

@@ -30,6 +30,7 @@ bool Engine::Init()
 //-----------------------------------------------------------------------------
 void Engine::Close()
 {
+	m_textureManager.Destroy();
 	m_renderDevice.Destroy();
 	m_window.Destroy();
 	CloseLogFile();

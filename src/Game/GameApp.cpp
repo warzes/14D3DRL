@@ -2,6 +2,7 @@
 #include "RenderResource.h"
 #include "Camera.h"
 #include "DrawPrimitive.h"
+#include "TextureManager.h"
 
 Camera camera;
 
@@ -24,7 +25,9 @@ struct VertexPos2Tex2
 	glm::vec2 texCoord;
 };
 
-Texture2D texture;
+//Texture2D texture;
+
+Texture2D* tex;
 
 // Embedded vertex shader source.
 const char* g_sample_vs_src = R"(
@@ -189,10 +192,8 @@ bool GameAppInit()
 	shaderProgramQuad.Bind();
 	shaderProgramQuad.SetUniform("screenTexture", 0);
 
-	Texture2DLoaderInfo textureLoaderInfo;
-	textureLoaderInfo.fileName = "../data/textures/1.png";
-	//textureLoaderInfo.mipmap = false;
-	texture.CreateFromFiles(textureLoaderInfo);
+	tex = gTextureManager->GetTexture2D("../data/textures/1.png");
+	if (!tex) return false;
 
 	vertex_t vertices[] = {
 		/* pos                  uvs */
@@ -278,7 +279,7 @@ void GameAppFrame()
 
 	shaderProgram2.Bind();
 	shaderProgram2.SetUniform(MatrixID, MVP);
-	texture.Bind();
+	tex->Bind();
 	vao.Draw();
 
 	{
@@ -305,9 +306,7 @@ void GameAppFrame()
 		vao.Draw();
 	}
 
-
-
-	//drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f),0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
+	drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f),0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
 
 	// Main Screen
 	FrameBuffer::MainFrameBufferBind();
@@ -324,7 +323,6 @@ void GameAppClose()
 	vertexBuf.Destroy();
 	indexBuf.Destroy();
 	shaderProgram2.Destroy();
-	texture.Destroy();
 	vao.Destroy();
 }
 //-----------------------------------------------------------------------------

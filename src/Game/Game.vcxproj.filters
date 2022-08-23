@@ -45,6 +45,12 @@
     <ClCompile Include="PlatformInputSystem.cpp">
       <Filter>Engine\Platform</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -90,6 +96,12 @@
     <ClInclude Include="PlatformInputSystem.h">
       <Filter>Engine\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -118,6 +130,12 @@
     </Filter>
     <Filter Include="Engine\Math">
       <UniqueIdentifier>{4eab45ba-546f-4965-b226-442ed25676c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameData">
+      <UniqueIdentifier>{93ba2f07-f037-4c81-b400-2e9bad24eb48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource">
+      <UniqueIdentifier>{69145b1a-94cc-48a1-bd0e-9a153305450d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
