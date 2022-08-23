@@ -6,6 +6,7 @@
 
 class Camera;
 class TilesCell;
+class SimpleFrustum;
 
 class TileMapGeometry
 {
@@ -16,7 +17,8 @@ public:
 	void Draw(const Camera& camera, TilesCell* tiles);
 
 private:
-	void drawSide(Texture2D* texture, const glm::mat4& VP, const Vector3& pos, TileSide side);
+	void drawTile(const SimpleFrustum& frustum, int x, int z, int y, TilesCell* tiles, int cameraPosY, const glm::mat4& vp);
+	void drawSide(Texture2D* texture, const glm::mat4& VP, glm::mat4 worldMat, TileSide side);
 
 	VertexArrayBuffer m_vao;
 	VertexBuffer m_vertexBuf;
