@@ -6,12 +6,27 @@
 
 #include "TileMapGeometry.h"
 
-constexpr int SizeMap = 100;
+constexpr int SizeMap = 500;
 constexpr int SizeMapZ = 3;
 
 
 struct TilesCell
 {
+	~TilesCell()
+	{
+		for (int z = 0; z < SizeMapZ; z++)
+		{
+			for (int x = 0; x < SizeMap; x++)
+			{
+				for (int y = 0; y < SizeMap; y++)
+				{
+					delete tiles[z][x][y];
+				}
+			}
+		}
+	}
+
+
 	Tile* tiles[SizeMapZ][SizeMap][SizeMap];
 };
 constexpr int TileSize = sizeof(Tile);

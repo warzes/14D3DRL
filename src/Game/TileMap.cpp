@@ -9,7 +9,6 @@ bool TileMap::Init()
 
 	m_tiles = new TilesCell;
 
-
 	// wall
 	Texture2D* tex = gTextureManager->GetTexture2D("../data/textures/1.png");
 	TileTemplate tileTemplate;
@@ -44,24 +43,13 @@ bool TileMap::Init()
 				}
 			}
 		}
-	}
-	
+	}	
 
 	return true;
 }
 //-----------------------------------------------------------------------------
 void TileMap::Close()
 {
-	for (int z = 0; z < SizeMapZ; z++)
-	{
-		for (int x = 0; x < SizeMap; x++)
-		{
-			for (int y = 0; y < SizeMap; y++)
-			{
-				delete m_tiles->tiles[z][x][y];
-			}
-		}
-	}
 	delete m_tiles;
 	m_tileGeometry.Close();
 }

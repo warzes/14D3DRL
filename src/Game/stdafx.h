@@ -10,6 +10,7 @@
 // STL Header
 #include <cassert>
 #include <chrono>
+#include <algorithm>
 #include <string>
 #include <array>
 #include <vector>

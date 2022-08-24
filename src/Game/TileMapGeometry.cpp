@@ -6,6 +6,7 @@
 #include "Utility.h"
 #include "TileMap.h"
 #define DRAW_BOX_TEST 0
+#define DRAW_COMMAND 0
 //-----------------------------------------------------------------------------
 constexpr const char* vertexShaderSource = R"(
 #version 330 core
@@ -123,6 +124,23 @@ void TileMapGeometry::Close()
 	m_shaderProgram.Destroy();
 	m_vao.Destroy();
 }
+
+#if DRAW_COMMAND
+struct CommandDrawTileInfo
+{
+	CommandDrawTileInfo() = default;
+	CommandDrawTileInfo(const CommandDrawTileInfo&) = default;
+	CommandDrawTileInfo& operator=(const CommandDrawTileInfo& c) = default;
+
+	Texture2D* texture;
+	glm::vec3 pos;
+	TileSide side;
+
+	float distance = 0.0f;
+};
+std::vector<CommandDrawTileInfo> gCommandDrawTileInfo;
+int numCommandDrawTileInfo = 0;
+#endif
 //-----------------------------------------------------------------------------
 void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 {
@@ -169,36 +187,50 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	const int cameraPosY = floor(camera.GetPosition().y);
 	const int cameraPosZ = floor(camera.GetPosition().z);
 
-	glm::mat4 vp = camera.GetProjectionMatrix() * camera.GetViewMatrix();
+	const glm::mat4 vp = camera.GetProjectionMatrix() * camera.GetViewMatrix();
 
 	SimpleFrustum frustum;
 	frustum.Extract(camera.GetProjectionMatrix(), camera.GetViewMatrix());
 
-#if 0
-	// новый способ рисования
-	drawTile(frustum, cameraPosX, cameraPosY, cameraPosZ, tiles, cameraPosY, vp);
+#if DRAW_COMMAND
+	numCommandDrawTileInfo = 0;
+#endif
 
-	for (int x = cameraPosX - 1; x <= cameraPosX + 1; x++)
+#if 0 // получилось медленее
+	// новый способ рисования
+
+	constexpr int viewDist = 40;
+
+	for (int z = 0; z < SizeMapZ; z++)
 	{
-		for (int y = cameraPosZ - 1; y <= cameraPosZ + 1; y++)
+		drawTile(frustum, cameraPosX, cameraPosZ, z, tiles, cameraPosY, vp);
+
+		// 1 ряд
+		for (int x = cameraPosX - 1; x <= cameraPosX + 1; x++)
 		{
-			drawTile(frustum, x, cameraPosY, y, tiles, cameraPosY, vp);
+			drawTile(frustum, x, cameraPosZ - 1, z, tiles, cameraPosY, vp);
+			drawTile(frustum, x, cameraPosZ + 1, z, tiles, cameraPosY, vp);
+		}
+		drawTile(frustum, cameraPosX - 1, cameraPosZ, z, tiles, cameraPosY, vp);
+		drawTile(frustum, cameraPosX + 1, cameraPosZ, z, tiles, cameraPosY, vp);
+
+		for (int i = 2; i < viewDist; i++)
+		{
+			for (int x = cameraPosX - i; x <= cameraPosX + i; x++)
+			{
+				drawTile(frustum, x, cameraPosZ - i, z, tiles, cameraPosY, vp);
+				drawTile(frustum, x, cameraPosZ + i, z, tiles, cameraPosY, vp);
+			}
+			for (int y = cameraPosZ - i + 1; y <= cameraPosZ + i - 1; y++)
+			{
+				drawTile(frustum, cameraPosX - i, y, z, tiles, cameraPosY, vp);
+				drawTile(frustum, cameraPosX + i, y, z, tiles, cameraPosY, vp);
+			}
 		}
 	}
-
-	1	2	3	4	5	6
-	2	2	2	2	2	2
-	3	2	1	1	1	2
-	4	2	1	0	1	2
-	5	2	1	1	1	2
-	6	2	2	2	2	2
-
 #else
 
-	constexpr int viewDist = 100;
-
-	// нужно по другому - нужно x,y,z  =равны камере - и увеличиваются до дистанции (ведь что влево, что вправо - логика одна, так зачем два шага цикла, если можно один и отзеркалить?
-
+	constexpr int viewDist = 20;
 	for (int z = 0; z < SizeMapZ; z++)
 	{
 		for (int x = cameraPosX - viewDist; x < cameraPosX + viewDist; x++)
@@ -207,92 +239,196 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 			for (int y = cameraPosZ - viewDist; y < cameraPosZ + viewDist; y++)
 			{
 				if (y < 0 || y >= SizeMap) continue;
-				if (!tiles->tiles[z][x][y] || !tiles->tiles[z][x][y]->tileTemplate) continue;
-				{
-					drawTile(frustum, x, z, y, tiles, cameraPosY, vp);
-				}
+				drawTile(frustum, x, y, z, tiles, cameraPosY, vp, camera);
 			}
 		}
 	}
+
+#if DRAW_COMMAND
+	struct sort_class_x
+	{
+		bool operator() (CommandDrawTileInfo i, CommandDrawTileInfo j)
+		{
+			return (i.distance < j.distance);
+		}
+	} sort_objectX;
+	std::sort(gCommandDrawTileInfo.begin(), gCommandDrawTileInfo.begin()+ numCommandDrawTileInfo-1, sort_objectX);
+
+	for(int ii = 0; ii < numCommandDrawTileInfo; ii++)
+	{
+		auto& cmd = gCommandDrawTileInfo[ii];
+		const glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), cmd.pos);
+		drawSide(cmd.texture, vp, translateMatrix, cmd.side);
+	}
+#endif
 #endif
 #endif
 }
 //-----------------------------------------------------------------------------
-void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int z, int y, TilesCell* tiles, int cameraPosY, const glm::mat4& vp)
+void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int y, int z, TilesCell* tiles, int cameraPosY, const glm::mat4& vp, const Camera& camera)
 {
-	if (x < 0 || x >= SizeMap) return;
-	if (y < 0 || y >= SizeMap) return;
-	if (z < 0 || z >= SizeMapZ) return;
+	if (x < 0 || x >= SizeMap || y < 0 || y >= SizeMap || z < 0 || z >= SizeMapZ) return;
+	if (!tiles->tiles[z][x][y] || !tiles->tiles[z][x][y]->tileTemplate) return;
 
 	const Vector3 fpos = { (float)x, z - 1.0f, (float)y };
 	const Vector3 min = { fpos.x - 0.5f, fpos.y - 0.5f, fpos.z - 0.5f };
 	const Vector3 max = { fpos.x + 0.5f, fpos.y + 0.5f, fpos.z + 0.5f };
 	if (!frustum.AABBoxIn(min, max)) return;
 
-	glm::mat4 ModelMatrix = glm::translate(glm::mat4(1.0f), { fpos.x, fpos.y, fpos.z });
+#if DRAW_COMMAND
+	CommandDrawTileInfo command;
+	command.pos = { fpos.x, fpos.y, fpos.z };
+	command.distance = glm::distance(camera.GetPosition(), command.pos);
 
 	// задняя сторона
 	if (y == 0 || !tiles->tiles[z][x][y - 1])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBack, vp, ModelMatrix, TileSide::Back);
-	}
+		command.texture = tiles->tiles[z][x][y]->tileTemplate->textureBack;
+		command.side = TileSide::Back;
 
+		if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+			gCommandDrawTileInfo.push_back(command);
+		else
+			gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+		numCommandDrawTileInfo++;
+
+	}
 	// передняя сторона
 	if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureForward, vp, ModelMatrix, TileSide::Forward);
-	}
+		command.texture = tiles->tiles[z][x][y]->tileTemplate->textureForward;
+		command.side = TileSide::Forward;
 
+		if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+			gCommandDrawTileInfo.push_back(command);
+		else
+			gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+		numCommandDrawTileInfo++;
+	}
 	// левая сторона
 	if (x == 0 || !tiles->tiles[z][x - 1][y])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, ModelMatrix, TileSide::Left);
-	}
+		command.texture = tiles->tiles[z][x][y]->tileTemplate->textureLeft;
+		command.side = TileSide::Left;
 
+		if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+			gCommandDrawTileInfo.push_back(command);
+		else
+			gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+		numCommandDrawTileInfo++;
+	}
 	// правая
 	if (x == SizeMap - 1 || !tiles->tiles[z][x + 1][y])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureRight, vp, ModelMatrix, TileSide::Right);
-	}
+		command.texture = tiles->tiles[z][x][y]->tileTemplate->textureRight;
+		command.side = TileSide::Right;
 
+		if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+			gCommandDrawTileInfo.push_back(command);
+		else
+			gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+		numCommandDrawTileInfo++;
+	}
 	// вверх
 	if (cameraPosY > fpos.y)
 	{
 		if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, vp, ModelMatrix, TileSide::Top);
-	}
+		{
+			command.texture = tiles->tiles[z][x][y]->tileTemplate->textureTop;
+			command.side = TileSide::Top;
 
+			if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+				gCommandDrawTileInfo.push_back(command);
+			else
+				gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+			numCommandDrawTileInfo++;
+		}
+	}
 	// низ
 	if (cameraPosY < fpos.y)
 	{
 		if (z == 0 || !tiles->tiles[z - 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBottom, vp, ModelMatrix, TileSide::Bottom);
+		{
+			command.texture = tiles->tiles[z][x][y]->tileTemplate->textureBottom;
+			command.side = TileSide::Bottom;
+
+			if (numCommandDrawTileInfo == gCommandDrawTileInfo.size())
+				gCommandDrawTileInfo.push_back(command);
+			else
+				gCommandDrawTileInfo[numCommandDrawTileInfo] = command;
+			numCommandDrawTileInfo++;
+		}
 	}
+
+#else
+	const glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), { fpos.x, fpos.y, fpos.z });
+
+	// задняя сторона
+	if (y == 0 || !tiles->tiles[z][x][y - 1])
+	{
+		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBack, vp, translateMatrix, TileSide::Back);
+	}
+	// передняя сторона
+	if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
+	{
+		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureForward, vp, translateMatrix, TileSide::Forward);
+	}
+	// левая сторона
+	if (x == 0 || !tiles->tiles[z][x - 1][y])
+	{
+		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, translateMatrix, TileSide::Left);
+	}
+	// правая
+	if (x == SizeMap - 1 || !tiles->tiles[z][x + 1][y])
+	{
+		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureRight, vp, translateMatrix, TileSide::Right);
+	}
+	// вверх
+	if (cameraPosY > fpos.y)
+	{
+		if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
+			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, vp, translateMatrix, TileSide::Top);
+	}
+	// низ
+	if (cameraPosY < fpos.y)
+	{
+		if (z == 0 || !tiles->tiles[z - 1][x][y])
+			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBottom, vp, translateMatrix, TileSide::Bottom);
+	}
+#endif
 }
 //-----------------------------------------------------------------------------
 void TileMapGeometry::drawSide(Texture2D* texture, const glm::mat4& VP, glm::mat4 worldMat, TileSide side)
 {
 	texture->Bind();
 
+	constexpr float radM90 = glm::radians(-90.0f);
+	constexpr float rad90 = glm::radians(90.0f);
+	constexpr float rad0 = glm::radians(0.0f);
+	constexpr float rad180 = glm::radians(180.0f);
+
+	constexpr glm::vec3 axisX = { 1.0f, 0.0f, 0.0f };
+	constexpr glm::vec3 axisY = { 0.0f, 1.0f, 0.0f };
+
 	switch (side)
 	{
 	case TileSide::Top:
-		worldMat = glm::rotate(worldMat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, radM90, axisX);
 		break;
 	case TileSide::Bottom:
-		worldMat = glm::rotate(worldMat, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, rad90, axisX);
 		break;
 	case TileSide::Forward:
-		worldMat = glm::rotate(worldMat, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, rad0, axisY);
 		break;
 	case TileSide::Back:
-		worldMat = glm::rotate(worldMat, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, rad180, axisY);
 		break;
 	case TileSide::Left:
-		worldMat = glm::rotate(worldMat, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, radM90, axisY);
 		break;
 	case TileSide::Right:
-		worldMat = glm::rotate(worldMat, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		worldMat = glm::rotate(worldMat, rad90, axisY);
 		break;
 	}	
 

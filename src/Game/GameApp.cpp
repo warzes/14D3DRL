@@ -9,7 +9,7 @@ Offscreen offscreen;
 //-----------------------------------------------------------------------------
 bool GameAppInit()
 {
-	camera.SetPosition({ 50.0f, 0.0f, 100.0f });
+	camera.SetPosition({ 50.0f, 0.0f, 80.0f });
 
 	if (!tileMap.Init())
 		return false;

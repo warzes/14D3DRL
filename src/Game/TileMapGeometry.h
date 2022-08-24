@@ -17,7 +17,7 @@ public:
 	void Draw(const Camera& camera, TilesCell* tiles);
 
 private:
-	void drawTile(const SimpleFrustum& frustum, int x, int z, int y, TilesCell* tiles, int cameraPosY, const glm::mat4& vp);
+	void drawTile(const SimpleFrustum& frustum, int x, int y, int z, TilesCell* tiles, int cameraPosY, const glm::mat4& vp, const Camera& camera);
 	void drawSide(Texture2D* texture, const glm::mat4& VP, glm::mat4 worldMat, TileSide side);
 
 	VertexArrayBuffer m_vao;
