@@ -230,7 +230,7 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	}
 #else
 
-	constexpr int viewDist = 20;
+	constexpr int viewDist = 60;
 	for (int z = 0; z < SizeMapZ; z++)
 	{
 		for (int x = cameraPosX - viewDist; x < cameraPosX + viewDist; x++)
@@ -268,7 +268,7 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int y, int z, TilesCell* tiles, int cameraPosY, const glm::mat4& vp, const Camera& camera)
 {
 	if (x < 0 || x >= SizeMap || y < 0 || y >= SizeMap || z < 0 || z >= SizeMapZ) return;
-	if (!tiles->tiles[z][x][y] || !tiles->tiles[z][x][y]->tileTemplate) return;
+	if (!tiles->tiles[z][x][y]) return;
 
 	const Vector3 fpos = { (float)x, z - 1.0f, (float)y };
 	const Vector3 min = { fpos.x - 0.5f, fpos.y - 0.5f, fpos.z - 0.5f };
@@ -366,40 +366,42 @@ void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int y, int z
 	// задн€€ сторона
 	if (y == 0 || !tiles->tiles[z][x][y - 1])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBack, vp, translateMatrix, TileSide::Back);
+		drawSide(tiles->tiles[z][x][y]->textureBack, vp, translateMatrix, TileSide::Back);
 	}
 	// передн€€ сторона
 	if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureForward, vp, translateMatrix, TileSide::Forward);
+		drawSide(tiles->tiles[z][x][y]->textureForward, vp, translateMatrix, TileSide::Forward);
 	}
 	// лева€ сторона
 	if (x == 0 || !tiles->tiles[z][x - 1][y])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureLeft, vp, translateMatrix, TileSide::Left);
+		drawSide(tiles->tiles[z][x][y]->textureLeft, vp, translateMatrix, TileSide::Left);
 	}
 	// права€
 	if (x == SizeMap - 1 || !tiles->tiles[z][x + 1][y])
 	{
-		drawSide(tiles->tiles[z][x][y]->tileTemplate->textureRight, vp, translateMatrix, TileSide::Right);
+		drawSide(tiles->tiles[z][x][y]->textureRight, vp, translateMatrix, TileSide::Right);
 	}
 	// вверх
 	if (cameraPosY > fpos.y)
 	{
 		if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureTop, vp, translateMatrix, TileSide::Top);
+			drawSide(tiles->tiles[z][x][y]->textureTop, vp, translateMatrix, TileSide::Top);
 	}
 	// низ
 	if (cameraPosY < fpos.y)
 	{
 		if (z == 0 || !tiles->tiles[z - 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->tileTemplate->textureBottom, vp, translateMatrix, TileSide::Bottom);
+			drawSide(tiles->tiles[z][x][y]->textureBottom, vp, translateMatrix, TileSide::Bottom);
 	}
 #endif
 }
 //-----------------------------------------------------------------------------
 void TileMapGeometry::drawSide(Texture2D* texture, const glm::mat4& VP, glm::mat4 worldMat, TileSide side)
 {
+	if (!texture) return;
+
 	texture->Bind();
 
 	constexpr float radM90 = glm::radians(-90.0f);

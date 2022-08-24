@@ -3,7 +3,7 @@
 
 TileTemplateManager gTileTemplateManager;
 
-bool TileTemplate::operator==(const TileTemplate& a) const
+bool Tile::operator==(const Tile& a) const
 {
 	if (textureTop == a.textureTop &&
 		textureBottom == a.textureBottom &&
@@ -16,7 +16,7 @@ bool TileTemplate::operator==(const TileTemplate& a) const
 	return false;
 }
 
-TileTemplate* TileTemplateManager::AddTileTemplate(const TileTemplate& tileTemplate)
+Tile* TileTemplateManager::AddTileTemplate(const Tile& tileTemplate)
 {
 	for (int i = 0; i < m_tiles.size(); i++)
 	{

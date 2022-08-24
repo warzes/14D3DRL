@@ -12,8 +12,19 @@ enum class TileSide
 	Right
 };
 
-struct TileTemplate
+struct Tile
 {
+	void SetTexture(Texture2D* texture)
+	{
+		textureTop = textureBottom = textureForward = textureBack = textureLeft = textureRight = texture;
+	}
+	void SetTexture(Texture2D* side, Texture2D* top, Texture2D* bottom)
+	{
+		textureTop = top;
+		textureBottom = bottom;
+		textureForward = textureBack = textureLeft = textureRight = side;
+	}
+
 	Texture2D* textureTop = nullptr;
 	Texture2D* textureBottom = nullptr;
 	Texture2D* textureForward = nullptr;
@@ -21,20 +32,15 @@ struct TileTemplate
 	Texture2D* textureLeft = nullptr;
 	Texture2D* textureRight = nullptr;
 
-	bool operator==(const TileTemplate& a) const;
+	bool operator==(const Tile& t) const;
 };
 
 class TileTemplateManager
 {
 public:
-	TileTemplate* AddTileTemplate(const TileTemplate& tileTemplate);
+	Tile* AddTileTemplate(const Tile& tileTemplate);
 private:
-	std::vector<TileTemplate> m_tiles;
+	std::vector<Tile> m_tiles;
 };
 
 extern TileTemplateManager gTileTemplateManager;
-
-struct Tile
-{
-	TileTemplate* tileTemplate = nullptr;
-};
