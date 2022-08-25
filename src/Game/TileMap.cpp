@@ -1,9 +1,22 @@
 #include "stdafx.h"
 #include "TileMap.h"
 #include "TextureManager.h"
+
+#include "Generator.h"
+#include "GenDungeon.h"
+#include "GenMap.h"
+#include "Rng.h"
+
+Generator* generator = new ClassicDungeon;
+GenMap map(SizeMap, SizeMap);
+Rng rng;
+
+
 //-----------------------------------------------------------------------------
 bool TileMap::Init()
 {
+	generator->generate(map, rng);
+
 	if (!m_tileGeometry.Init())
 		return false;
 
@@ -43,6 +56,7 @@ bool TileMap::Init()
 				tileTemplate.SetTexture(tex);
 			}
 
+#if 0
 			m_tiles->tiles[0][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
 			m_tiles->tiles[3][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
 
@@ -56,6 +70,27 @@ bool TileMap::Init()
 			{
 				m_tiles->tiles[2][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
 			}*/
+#else
+			switch (map.getTile(x, y))
+			{
+			case GenTile::Floor:
+			case GenTile::Corridor:
+			case GenTile::ClosedDoor:
+			case GenTile::OpenDoor:
+			case GenTile::UpStairs:
+			case GenTile::DownStairs:
+				m_tiles->tiles[0][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+				m_tiles->tiles[3][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+				break;
+
+			case GenTile::Wall:
+				m_tiles->tiles[1][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+				m_tiles->tiles[2][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+				break;
+			default:
+				break;
+			}
+#endif
 		}
 	}	
 

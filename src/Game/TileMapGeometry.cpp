@@ -23,8 +23,8 @@ out vec2 UV;
 out vec3 normal;
 out float visibility;
 
-const float density = 0.03;
-//const float density = 0.1;
+//const float density = 0.03;
+const float density = 0.09;
 const float gradient = 1.5;
 
 void main()
@@ -77,9 +77,50 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
+constexpr const char* solidFragmentShaderSource = R"(
+#version 330 core
+
+in vec2 UV;
+in vec3 normal;
+in float visibility;
+
+out vec4 FragColor;
+
+uniform vec3 uColor;
+uniform sampler2D Texture0;
+
+void main()
+{
+	vec3 fogColor = vec3(0.4, 0.5, 0.4);
+	vec3 lightDirection = vec3(0.0, 0.8, 0.2);
+	vec3 norm = normalize(normal);
+	float shadow = dot(norm, lightDirection);
+	if(shadow <= 0.0)
+	{
+		shadow = 0.0;
+	}
+	vec3 objectColor = uColor;
+
+	FragColor = (vec4(objectColor, 1.0) * (shadow + 0.3)) * 0.7;
+	FragColor = mix(vec4(fogColor, 1.0), FragColor, visibility);
+
+
+	vec3 color1 = vec3(0.1, 0.2, 0.3);
+	vec3 color2 = vec3(0.8, 0.4, 0.2);
+
+	vec4 color = FragColor;
+	//color.rgb = color2;
+
+	if (UV.x < 0.01 || UV.x > 0.99) color.rgb = color1;
+	if (UV.y < 0.01 || UV.y > 0.99) color.rgb = color1;
+	FragColor = color;
+}
+)";
+//-----------------------------------------------------------------------------
 bool TileMapGeometry::Init()
 {
 	m_shaderProgram.CreateFromMemories(vertexShaderSource, fragmentShaderSource);
+	//m_shaderProgram.CreateFromMemories(vertexShaderSource, solidFragmentShaderSource);
 	m_shaderProgram.Bind();
 	//m_MatrixID = m_shaderProgram.GetUniformVariable("MVP");
 	m_modelMatrixID = m_shaderProgram.GetUniformVariable("model");
@@ -195,6 +236,11 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	constexpr int viewDist = 60;
 	for (int z = 0; z < SizeMapZ; z++)
 	{
+#ifdef _DEBUG
+		if (z == 0 && (int)cameraPosY < z) continue;
+		if (z == SizeMapZ-1 && (int)cameraPosY >= z) continue;
+#endif
+
 		for (int x = cameraPosX - viewDist; x < cameraPosX + viewDist; x++)
 		{
 			if (x < 0 || x >= SizeMap) continue;

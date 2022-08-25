@@ -92,6 +92,12 @@ bool RenderDevice::Create()
 	glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
 	glClearDepth(1.0f);
 
+	// Init state: Culling
+	// NOTE: All shapes/models triangles are drawn CCW
+	//glCullFace(GL_BACK);                                    // Cull the back face (default)
+	//glFrontFace(GL_CCW);                                    // Front face are defined counter clockwise (default)
+	//glEnable(GL_CULL_FACE);                                 // Enable backface culling
+
 	// Show current OpenGL and GLSL version
 	LogPrint("GL: OpenGL device information:");
 	LogPrint(("    > Vendor:   " + std::string((const char*)glGetString(GL_VENDOR))).c_str());
@@ -124,7 +130,6 @@ void RenderDevice::Clear()
 {
 	glViewport(0, 0, WindowWidth, WindowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 }
 //-----------------------------------------------------------------------------
 void RenderDevice::Swap()

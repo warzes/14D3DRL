@@ -9,6 +9,9 @@ public:
 	void MoveBackward(float deltaTime, float speedMod = 1.0f);
 	void MoveRight(float deltaTime, float speedMod = 1.0f);
 	void MoveLeft(float deltaTime, float speedMod = 1.0f);
+	void MoveUp(float deltaTime, float speedMod = 1.0f);
+	void MoveDown(float deltaTime, float speedMod = 1.0f);
+
 	void Rotate(float offsetX, float offsetY);
 
 	void SimpleMove(float deltaTime);

@@ -60,6 +60,21 @@
     <ClCompile Include="Tile.cpp">
       <Filter>GameData</Filter>
     </ClCompile>
+    <ClCompile Include="Generator.cpp">
+      <Filter>Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="GenMap.cpp">
+      <Filter>Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="Direction.cpp">
+      <Filter>Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="Rng.cpp">
+      <Filter>Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="GenDungeon.cpp">
+      <Filter>Generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -129,6 +144,27 @@
     <ClInclude Include="GeometryMath.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Generator.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenMap.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenTile.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="Direction.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenUtils.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="Rng.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GenDungeon.h">
+      <Filter>Generator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -163,6 +199,9 @@
     </Filter>
     <Filter Include="Engine\Resource">
       <UniqueIdentifier>{69145b1a-94cc-48a1-bd0e-9a153305450d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generator">
+      <UniqueIdentifier>{c3314c99-80c9-41ac-b3a0-1a9cf45dc9ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

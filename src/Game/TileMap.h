@@ -6,7 +6,7 @@
 
 #include "TileMapGeometry.h"
 
-constexpr int SizeMap = 100;
+constexpr int SizeMap = 70;
 constexpr int SizeMapZ = 4;
 
 

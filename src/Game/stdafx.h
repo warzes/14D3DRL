@@ -11,8 +11,10 @@
 #include <cassert>
 #include <chrono>
 #include <algorithm>
+#include <random>
 #include <string>
 #include <array>
+#include <queue>
 #include <vector>
 #include <unordered_map>
 #include <memory>

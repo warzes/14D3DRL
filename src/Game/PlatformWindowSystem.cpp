@@ -442,6 +442,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, true);
 		else if (wParam == uint8_t('X')) SetKeyState(Key::B, true);
 		else if (wParam == uint8_t('C')) SetKeyState(Key::C, true);
+
+#ifdef _DEBUG
+		else if (wParam == uint8_t('R')) SetKeyState(Key::R, true);
+		else if (wParam == uint8_t('F')) SetKeyState(Key::F, true);
+		else if (wParam == uint8_t('T')) SetKeyState(Key::T, true);
+		else if (wParam == uint8_t('G')) SetKeyState(Key::G, true);
+#endif
+
 		//const bool repeat = !!(lParam & 0x40000000);
 		//const int vk = (int)(HIWORD(lParam) & 0x1FF);
 		//swprintf_s(mesgt, L"WM_KEYDOWN: 0x%x\n", wParam);
@@ -457,6 +465,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, false);
 		else if (wParam == uint8_t('X')) SetKeyState(Key::B, false);
 		else if (wParam == uint8_t('C')) SetKeyState(Key::C, false);
+
+#ifdef _DEBUG
+		else if (wParam == uint8_t('R')) SetKeyState(Key::R, false);
+		else if (wParam == uint8_t('F')) SetKeyState(Key::F, false);
+		else if (wParam == uint8_t('T')) SetKeyState(Key::T, false);
+		else if (wParam == uint8_t('G')) SetKeyState(Key::G, false);
+#endif
 		break;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);

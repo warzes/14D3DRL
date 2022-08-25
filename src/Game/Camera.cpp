@@ -24,6 +24,16 @@ void Camera::MoveLeft(float deltaTime, float speedMod)
 	m_position -= m_right * (m_movementSpeed * speedMod * deltaTime);
 }
 //-----------------------------------------------------------------------------
+void Camera::MoveUp(float deltaTime, float speedMod)
+{
+	m_position += m_up * (m_movementSpeed * speedMod * deltaTime);
+}
+//-----------------------------------------------------------------------------
+void Camera::MoveDown(float deltaTime, float speedMod)
+{
+	m_position -= m_up * (m_movementSpeed * speedMod * deltaTime);
+}
+//-----------------------------------------------------------------------------
 void Camera::Rotate(float offsetX, float offsetY)
 {
 	m_yaw += offsetX * m_sensitivity;
@@ -40,17 +50,15 @@ void Camera::Rotate(float offsetX, float offsetY)
 //-----------------------------------------------------------------------------
 void Camera::SimpleMove(float deltaTime)
 {
-	const float xpos = 1024 / 2;// gPlatformSystem->GetMouseX();
-	const float ypos = 768 / 2;// gPlatformSystem->GetMouseY();
-	static float lastPosX = xpos;
-	static float lastPosY = ypos;
-	Rotate((xpos - lastPosX), (lastPosY - ypos));
-	lastPosX = xpos;
-	lastPosY = ypos;
+	//const float xpos = 1024 / 2;// gPlatformSystem->GetMouseX();
+	//const float ypos = 768 / 2;// gPlatformSystem->GetMouseY();
+	//static float lastPosX = xpos;
+	//static float lastPosY = ypos;
+	//Rotate((xpos - lastPosX), (lastPosY - ypos));
+	//lastPosX = xpos;
+	//lastPosY = ypos;
 
-
-
-	constexpr float speedMod = 2.0f;
+	constexpr float speedMod = 1.0f;
 	if (IsKeyDown(Key::Up))
 		MoveForward(deltaTime, speedMod);
 	if (IsKeyDown(Key::Down))
@@ -65,6 +73,18 @@ void Camera::SimpleMove(float deltaTime)
 		Rotate(speedRotateMod *deltaTime, 0.0f);
 	if (IsKeyDown(Key::Left))
 		Rotate(-speedRotateMod * deltaTime, 0.0f);
+
+#ifdef _DEBUG
+	if (IsKeyDown(Key::T))
+		MoveUp(deltaTime, speedMod / 2.0f);
+	if (IsKeyDown(Key::G))
+		MoveDown(deltaTime, speedMod / 2.0f);
+
+	if (IsKeyDown(Key::R))
+		Rotate(0.0f, speedRotateMod * deltaTime);
+	if (IsKeyDown(Key::F))
+		Rotate(0.0f, -speedRotateMod * deltaTime);
+#endif
 
 	Update();
 }
