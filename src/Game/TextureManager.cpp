@@ -34,11 +34,10 @@ Texture2D* TextureManager::GetTexture2D(const std::string& name)
 	{
 		LogPrint(("Load texture: " + name).c_str());
 
-
 		Texture2DLoaderInfo textureLoaderInfo = {};
 		textureLoaderInfo.fileName = name;
 		//textureLoaderInfo.mipmap = false;
-		
+
 		Texture2D texture;
 		if (!texture.CreateFromFiles(textureLoaderInfo) || !texture.IsValid())
 			return nullptr;

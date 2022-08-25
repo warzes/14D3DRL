@@ -50,7 +50,7 @@ void Camera::SimpleMove(float deltaTime)
 
 
 
-	constexpr float speedMod = 1.0f;
+	constexpr float speedMod = 2.0f;
 	if (IsKeyDown(Key::Up))
 		MoveForward(deltaTime, speedMod);
 	if (IsKeyDown(Key::Down))

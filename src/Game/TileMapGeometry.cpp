@@ -5,7 +5,6 @@
 #include "DrawPrimitive.h"
 #include "Utility.h"
 #include "TileMap.h"
-#define DRAW_BOX_TEST 0
 #define DRAW_COMMAND 0
 //-----------------------------------------------------------------------------
 constexpr const char* vertexShaderSource = R"(
@@ -47,52 +46,6 @@ bool TileMapGeometry::Init()
 	m_TextureID = m_shaderProgram.GetUniformVariable("Texture0");
 	m_shaderProgram.SetUniform(m_TextureID, 0);
 
-#if DRAW_BOX_TEST
-	tex = gTextureManager->GetTexture2D("../data/textures/1mx1m.png");
-	if (!tex) return false;
-	constexpr Vertex_Pos3_TexCoord vertices[] = 
-	{
-		/* pos                  uvs */
-		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
-		{ { 1.0f, -1.0f, -1.0f},  {1.0f, 0.0f} },
-		{ { 1.0f,  1.0f, -1.0f},  {1.0f, 1.0f} },
-		{ {-1.0f,  1.0f, -1.0f},  {0.0f, 1.0f} },
-
-		{ {-1.0f, -1.0f,  1.0f},  {0.0f, 0.0f} },
-		{ { 1.0f, -1.0f,  1.0f},  {1.0f, 0.0f} },
-		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
-		{ {-1.0f,  1.0f,  1.0f},  {0.0f, 1.0f} },
-
-		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
-		{ {-1.0f,  1.0f, -1.0f},  {1.0f, 0.0f} },
-		{ {-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
-		{ {-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f} },
-
-		{ { 1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
-		{ { 1.0f,  1.0f, -1.0f},  {1.0f, 0.0f} },
-		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
-		{ { 1.0f, -1.0f,  1.0f},  {0.0f, 1.0f} },
-
-		{ {-1.0f, -1.0f, -1.0f},  {0.0f, 0.0f} },
-		{ {-1.0f, -1.0f,  1.0f},  {1.0f, 0.0f} },
-		{ { 1.0f, -1.0f,  1.0f},  {1.0f, 1.0f} },
-		{ { 1.0f, -1.0f, -1.0f},  {0.0f, 1.0f} },
-
-		{ {-1.0f,  1.0f, -1.0f},  {0.0f, 0.0f} },
-		{ {-1.0f,  1.0f,  1.0f},  {1.0f, 0.0f} },
-		{ { 1.0f,  1.0f,  1.0f},  {1.0f, 1.0f} },
-		{ { 1.0f,  1.0f, -1.0f},  {0.0f, 1.0f} },
-	};
-
-	constexpr uint16_t indices[] = {
-	   0, 1, 2,  0, 2, 3,
-	   6, 5, 4,  7, 6, 4,
-	   8, 9, 10,  8, 10, 11,
-	   14, 13, 12,  15, 14, 12,
-	   16, 17, 18,  16, 18, 19,
-	   22, 21, 20,  23, 22, 20
-	};
-#else
 	constexpr Vertex_Pos3_TexCoord vertices[] =
 	{
 		/* pos                     uvs */
@@ -103,7 +56,6 @@ bool TileMapGeometry::Init()
 	};
 	constexpr uint16_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
-#endif
 	m_vertexBuf.Create(RenderResourceUsage::Static, Countof(vertices), sizeof(Vertex_Pos3_TexCoord), vertices);
 	m_indexBuf.Create(RenderResourceUsage::Static, Countof(indices), sizeof(uint16_t), indices);
 
@@ -144,43 +96,6 @@ int numCommandDrawTileInfo = 0;
 //-----------------------------------------------------------------------------
 void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 {
-#if DRAW_BOX_TEST
-	{
-		tex->Bind();
-		m_shaderProgram.Bind();
-		glm::mat4 ProjectionMatrix = camera.GetProjectionMatrix();
-		glm::mat4 ViewMatrix = camera.GetViewMatrix();
-		glm::mat4 RotateMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		glm::mat4 TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -4));
-		glm::mat4 ModelMatrix = TranslateMatrix * RotateMatrix;
-		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-		m_shaderProgram.SetUniform(m_MatrixID, MVP);
-		m_vao.Draw();
-
-		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(2, 0, -2));
-		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		m_shaderProgram.SetUniform(m_MatrixID, MVP);
-		m_vao.Draw();
-
-		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-2, 0, -2));
-		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		m_shaderProgram.SetUniform(m_MatrixID, MVP);
-		m_vao.Draw();
-
-
-		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(-4, 0, 0));
-		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		m_shaderProgram.SetUniform(m_MatrixID, MVP);
-		m_vao.Draw();
-
-		TranslateMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(4, 0, 0));
-		MVP = ProjectionMatrix * ViewMatrix * TranslateMatrix;
-		m_shaderProgram.SetUniform(m_MatrixID, MVP);
-		m_vao.Draw();
-	}
-	drawPrimitive::DrawCubeWires(camera, glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(2.0f), glm::vec3(0.0f, glm::radians(45.0f), 0.0f), glm::vec4(0.4f, 1.0f, 0.4f, 0.7f), true);
-#else
 	m_shaderProgram.Bind();
 
 	const int cameraPosX = floor(camera.GetPosition().x);
@@ -262,13 +177,12 @@ void TileMapGeometry::Draw(const Camera& camera, TilesCell* tiles)
 	}
 #endif
 #endif
-#endif
 }
 //-----------------------------------------------------------------------------
 void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int y, int z, TilesCell* tiles, int cameraPosY, const glm::mat4& vp, const Camera& camera)
 {
 	if (x < 0 || x >= SizeMap || y < 0 || y >= SizeMap || z < 0 || z >= SizeMapZ) return;
-	if (!tiles->tiles[z][x][y]) return;
+	if (tiles->tiles[z][x][y].tileInfoId == TileUnknown) return;
 
 	const Vector3 fpos = { (float)x, z - 1.0f, (float)y };
 	const Vector3 min = { fpos.x - 0.5f, fpos.y - 0.5f, fpos.z - 0.5f };
@@ -363,37 +277,39 @@ void TileMapGeometry::drawTile(const SimpleFrustum& frustum, int x, int y, int z
 #else
 	const glm::mat4 translateMatrix = glm::translate(glm::mat4(1.0f), { fpos.x, fpos.y, fpos.z });
 
+	auto& tileInfo = gTileTemplateManager.GetTileInfo(tiles->tiles[z][x][y]);
+
 	// задн€€ сторона
-	if (y == 0 || !tiles->tiles[z][x][y - 1])
+	if (y == 0 || tiles->tiles[z][x][y - 1].tileInfoId == TileUnknown)
 	{
-		drawSide(tiles->tiles[z][x][y]->textureBack, vp, translateMatrix, TileSide::Back);
+		drawSide(tileInfo.textureBack, vp, translateMatrix, TileSide::Back);
 	}
 	// передн€€ сторона
-	if (y == SizeMap - 1 || !tiles->tiles[z][x][y + 1])
+	if (y == SizeMap - 1 || tiles->tiles[z][x][y + 1].tileInfoId == TileUnknown)
 	{
-		drawSide(tiles->tiles[z][x][y]->textureForward, vp, translateMatrix, TileSide::Forward);
+		drawSide(tileInfo.textureForward, vp, translateMatrix, TileSide::Forward);
 	}
 	// лева€ сторона
-	if (x == 0 || !tiles->tiles[z][x - 1][y])
+	if (x == 0 || tiles->tiles[z][x - 1][y].tileInfoId == TileUnknown)
 	{
-		drawSide(tiles->tiles[z][x][y]->textureLeft, vp, translateMatrix, TileSide::Left);
+		drawSide(tileInfo.textureLeft, vp, translateMatrix, TileSide::Left);
 	}
 	// права€
-	if (x == SizeMap - 1 || !tiles->tiles[z][x + 1][y])
+	if (x == SizeMap - 1 || tiles->tiles[z][x + 1][y].tileInfoId == TileUnknown)
 	{
-		drawSide(tiles->tiles[z][x][y]->textureRight, vp, translateMatrix, TileSide::Right);
+		drawSide(tileInfo.textureRight, vp, translateMatrix, TileSide::Right);
 	}
 	// вверх
 	if (cameraPosY > fpos.y)
 	{
-		if (z == SizeMapZ - 1 || !tiles->tiles[z + 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->textureTop, vp, translateMatrix, TileSide::Top);
+		if (z == SizeMapZ - 1 || tiles->tiles[z + 1][x][y].tileInfoId == TileUnknown)
+			drawSide(tileInfo.textureTop, vp, translateMatrix, TileSide::Top);
 	}
 	// низ
 	if (cameraPosY < fpos.y)
 	{
-		if (z == 0 || !tiles->tiles[z - 1][x][y])
-			drawSide(tiles->tiles[z][x][y]->textureBottom, vp, translateMatrix, TileSide::Bottom);
+		if (z == 0 || tiles->tiles[z - 1][x][y].tileInfoId == TileUnknown)
+			drawSide(tileInfo.textureBottom, vp, translateMatrix, TileSide::Bottom);
 	}
 #endif
 }

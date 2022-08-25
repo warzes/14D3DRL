@@ -12,7 +12,7 @@ enum class TileSide
 	Right
 };
 
-struct Tile
+struct TileInfo
 {
 	void SetTexture(Texture2D* texture)
 	{
@@ -32,15 +32,24 @@ struct Tile
 	Texture2D* textureLeft = nullptr;
 	Texture2D* textureRight = nullptr;
 
-	bool operator==(const Tile& t) const;
+	bool operator==(const TileInfo& t) const;
+};
+
+constexpr uint16_t TileUnknown = 0;
+
+struct Tile
+{
+	uint16_t tileInfoId = TileUnknown;
 };
 
 class TileTemplateManager
 {
 public:
-	Tile* AddTileTemplate(const Tile& tileTemplate);
+	uint16_t AddTileTemplate(const TileInfo& tileTemplate);
+
+	TileInfo& GetTileInfo(const Tile& tile);
 private:
-	std::vector<Tile> m_tiles;
+	std::vector<TileInfo> m_tiles;
 };
 
 extern TileTemplateManager gTileTemplateManager;
