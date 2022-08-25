@@ -7,7 +7,7 @@
 #include "TileMapGeometry.h"
 
 constexpr int SizeMap = 100;
-constexpr int SizeMapZ = 5;
+constexpr int SizeMapZ = 4;
 
 
 struct TilesCell

@@ -44,17 +44,18 @@ bool TileMap::Init()
 			}
 
 			m_tiles->tiles[0][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
-			m_tiles->tiles[4][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+			m_tiles->tiles[3][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
 
 			int r = rand() % 100;
 			if (r < 10)
 			{
 				m_tiles->tiles[1][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
-			}
-			if (r < 3)
-			{
 				m_tiles->tiles[2][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
 			}
+			/*if (r < 3)
+			{
+				m_tiles->tiles[2][x][y].tileInfoId = gTileTemplateManager.AddTileTemplate(tileTemplate);
+			}*/
 		}
 	}	
 

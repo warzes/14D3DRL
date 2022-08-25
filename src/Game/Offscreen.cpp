@@ -37,19 +37,90 @@ void main()
 	d = min(d, dist4);
 
 	if (d == dist1) {
-	color = col1;
+		color = col1;
 	}
 	else if (d == dist2) {
-	color = col2;
+		color = col2;
 	}
 	else if (d == dist3) {
-	color = col3;
+		color = col3;
 	}
 	else {
-	color = col4;
+		color = col4;
 	} 
 
 	fragColor = vec4(color, 1.0).rgba;
+}
+)";
+//-----------------------------------------------------------------------------
+constexpr const char* Palette16FragmentShader = R"(
+#version 330 core
+
+in vec2 UV;
+
+out vec4 fragColor;
+
+uniform sampler2D screenTexture;
+
+const int numColor = 16;
+
+void main()
+{
+	vec3 color = texture(screenTexture, UV).rgb;
+	const float gamma = 1.5;
+	color.r = pow(color.r, gamma);
+	color.g = pow(color.g, gamma);
+	color.b = pow(color.b, gamma);
+
+	vec3 col[numColor];
+
+	col[0] = vec3(0.0, 0.0, 0.0);
+	col[1] = vec3(0.616, 0.616, 0.616);
+	col[2] = vec3(1.0, 1.0, 1.0);
+	col[3] = vec3(0.745, 0.149, 0.2);
+	col[4] = vec3(0.878, 0.435, 0.545);
+	col[5] = vec3(0.286, 0.235, 0.169);
+	col[6] = vec3(0.643, 0.392, 0.133);
+	col[7] = vec3(0.922, 0.537, 0.192);
+	col[8] = vec3(0.969, 0.886, 0.420);
+	col[9] = vec3(0.184, 0.282, 0.306);
+	col[10] = vec3(0.267, 0.537, 0.102);
+	col[11] = vec3(0.639, 0.808, 0.153);
+	col[12] = vec3(0.106, 0.149, 0.196);
+	col[13] = vec3(0.0, 0.341, 0.518);
+	col[14] = vec3(0.192, 0.635, 0.949);
+	col[15] = vec3(0.698, 0.863, 0.937);
+
+	//vec3 col0 = vec3(0.612, 0.725, 0.086);
+	//vec3 col1 = vec3(0.549, 0.667, 0.078);
+	//vec3 col2 = vec3(0.188, 0.392, 0.188);
+	//col[3] = vec3(0.063, 0.247, 0.063);
+
+
+
+	float dist[numColor];
+	for(int i = 0; i < numColor; ++i)
+	{
+		dist[i] = length(color - col[i]);
+	}
+
+	float d = min(dist[0], dist[1]);
+	for(int i = 2; i < numColor; ++i)
+	{
+		d = min(d, dist[i]);
+	}
+
+	color = vec3(1.0, 1.0, 1.0);
+	for(int i =0; i < numColor; ++i)
+	{
+		if (d == dist[i])
+		{
+			color = col[i];
+			break;
+		}
+	}
+
+	fragColor = vec4(color, 1.0);
 }
 )";
 //-----------------------------------------------------------------------------
@@ -94,7 +165,7 @@ extern int WindowHeight;
 //-----------------------------------------------------------------------------
 bool Offscreen::Init()
 {
-	//shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, GameBoyPaletteShader);
+	//m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, Palette16FragmentShader);
 	m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, OffscreenFragmentShader);
 	m_shaderProgramQuad.Bind();
 	m_shaderProgramQuad.SetUniform("screenTexture", 0);
@@ -133,7 +204,8 @@ void Offscreen::Close()
 //-----------------------------------------------------------------------------
 void Offscreen::Bind()
 {
-	m_fb.Bind({0.1, 0.3, 0.6});
+	//m_fb.Bind({0.1, 0.3, 0.6});
+	m_fb.Bind({ 0.4, 0.5, 0.4 });
 }
 //-----------------------------------------------------------------------------
 void Offscreen::DrawToScreen()

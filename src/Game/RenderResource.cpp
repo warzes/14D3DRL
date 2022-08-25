@@ -574,7 +574,8 @@ bool FrameBuffer::Create(int width, int height)
 
 	glGenTextures(1, &m_texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, m_texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB5_A1, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr); // TODO: дает эффект дизеринга
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // TODO: GL_LINEAR 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	Texture2D::UnBind(); // TODO:
