@@ -170,7 +170,7 @@ bool Offscreen::Init()
 	m_shaderProgramQuad.Bind();
 	m_shaderProgramQuad.SetUniform("screenTexture", 0);
 
-	m_fb.Create(1024, 768);
+	m_fb.Create(640, 480);
 
 	// Quad vertices
 	constexpr Vertex_Pos2_TexCoord quadVertices[] = {

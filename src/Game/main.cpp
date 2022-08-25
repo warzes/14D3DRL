@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "Engine.h"
 #include "CoreMath.h"
+ProceduralMapGenerator
 //-----------------------------------------------------------------------------
 #if defined(_MSC_VER)
 #	pragma comment( lib, "OpenGL32.lib" )

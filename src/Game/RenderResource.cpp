@@ -574,7 +574,12 @@ bool FrameBuffer::Create(int width, int height)
 
 	glGenTextures(1, &m_texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, m_texColorBuffer);
+#if 1
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+#else
+	glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_TRUE);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB5_A1, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT_1_5_5_5_REV, nullptr);
+#endif
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // TODO: GL_LINEAR 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	Texture2D::UnBind(); // TODO:

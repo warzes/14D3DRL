@@ -23,8 +23,8 @@ out vec2 UV;
 out vec3 normal;
 out float visibility;
 
-//const float density = 0.03;
-const float density = 0.09;
+const float density = 0.03;
+//const float density = 0.09;
 const float gradient = 1.5;
 
 void main()
