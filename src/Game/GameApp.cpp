@@ -2,17 +2,23 @@
 #include "Camera.h"
 #include "TileMap.h"
 #include "Offscreen.h"
+#include "GameInput.h"
+#include "FreeMove.h"
 //-----------------------------------------------------------------------------
 Camera camera;
 TileMap tileMap;
 Offscreen offscreen;
+extern bool IsEngineRun;
 //-----------------------------------------------------------------------------
 bool GameAppInit()
 {
-	camera.SetPosition({ 50.0f, 0.0f, 80.0f });
-
 	if (!tileMap.Init())
 		return false;
+
+	glm::vec3 playerPos = tileMap.GetStartPlayerPos();
+
+	camera.SetPosition({ playerPos.x, 0.3f, playerPos.y });
+	//camera.SetRotate(playerPos.z, 0.0f);
 
 	if (!offscreen.Init())
 		return false;
@@ -27,7 +33,15 @@ bool GameAppInit()
 //-----------------------------------------------------------------------------
 void GameAppUpdate(float deltaTime)
 {
-	camera.SimpleMove(deltaTime);
+	if (IsKeyDown(Key::Esc))
+	{
+		IsEngineRun = false;
+		return;
+	}
+
+	FreeMove(camera, tileMap.GetMapTileData(), deltaTime, true);
+
+	camera.Update();
 }
 //-----------------------------------------------------------------------------
 void GameAppFrame()

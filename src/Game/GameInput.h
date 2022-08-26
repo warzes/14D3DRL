@@ -11,6 +11,7 @@ enum class Key
 	A,
 	B,
 	C,
+	Esc,
 
 	// debug
 #ifdef _DEBUG
@@ -19,9 +20,9 @@ enum class Key
 };
 
 #ifdef _DEBUG
-constexpr size_t NumKey = 13;
+constexpr size_t NumKey = 14;
 #else
-constexpr size_t NumKey = 9;
+constexpr size_t NumKey = 10;
 #endif
 
 extern bool KeyDownState[NumKey];

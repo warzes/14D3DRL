@@ -167,10 +167,15 @@ bool Offscreen::Init()
 {
 	//m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, Palette16FragmentShader);
 	m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, OffscreenFragmentShader);
+
 	m_shaderProgramQuad.Bind();
 	m_shaderProgramQuad.SetUniform("screenTexture", 0);
 
-	m_fb.Create(640, 480);
+#if TileMapSimpleTexture
+	m_fb.Create(320, 240);
+#else
+	m_fb.Create(800, 600);
+#endif
 
 	// Quad vertices
 	constexpr Vertex_Pos2_TexCoord quadVertices[] = {
@@ -204,8 +209,8 @@ void Offscreen::Close()
 //-----------------------------------------------------------------------------
 void Offscreen::Bind()
 {
-	//m_fb.Bind({0.1, 0.3, 0.6});
-	m_fb.Bind({ 0.4, 0.5, 0.4 });
+	m_fb.Bind({0.1, 0.3, 0.6});
+	//m_fb.Bind({ 0.4, 0.5, 0.4 });
 }
 //-----------------------------------------------------------------------------
 void Offscreen::DrawToScreen()

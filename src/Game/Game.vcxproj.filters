@@ -165,6 +165,16 @@
     <ClInclude Include="GenDungeon.h">
       <Filter>Generator</Filter>
     </ClInclude>
+    <ClInclude Include="TileMapShader.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreConfig.h" />
+    <ClInclude Include="FreeMove.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMath.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

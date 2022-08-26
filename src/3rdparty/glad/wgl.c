@@ -41,7 +41,8 @@ static int glad_wgl_has_extension(HDC hdc, const char *ext) {
     return 0;
 }
 
-int gladLoadWGLUserPtr(HDC hdc, GLADuserptrloadfunc load, void *userptr) {
+int gladLoadWGLUserPtr(HDC hdc, GLADuserptrloadfunc load, void *userptr) 
+{
     wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC) load(userptr, "wglGetExtensionsStringARB");
     wglGetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC) load(userptr, "wglGetExtensionsStringEXT");
     if(wglGetExtensionsStringARB == NULL && wglGetExtensionsStringEXT == NULL) return 0;

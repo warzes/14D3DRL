@@ -442,6 +442,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, true);
 		else if (wParam == uint8_t('X')) SetKeyState(Key::B, true);
 		else if (wParam == uint8_t('C')) SetKeyState(Key::C, true);
+		else if (wParam == VK_ESCAPE) SetKeyState(Key::Esc, true);
 
 #ifdef _DEBUG
 		else if (wParam == uint8_t('R')) SetKeyState(Key::R, true);
@@ -465,6 +466,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE || wParam == uint8_t('Z')) SetKeyState(Key::A, false);
 		else if (wParam == uint8_t('X')) SetKeyState(Key::B, false);
 		else if (wParam == uint8_t('C')) SetKeyState(Key::C, false);
+		else if (wParam == VK_ESCAPE) SetKeyState(Key::Esc, false);
 
 #ifdef _DEBUG
 		else if (wParam == uint8_t('R')) SetKeyState(Key::R, false);

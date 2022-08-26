@@ -304,6 +304,15 @@ bool Texture2D::CreateFromMemories(const Texture2DCreateInfo& createInfo)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, translate(minFilter));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, translate(createInfo.magFilter));
 
+//
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//
+//#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+//#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
+
+
 	// set texture format
 	GLenum format = GL_RGB;
 	GLint internalFormat = GL_RGB;

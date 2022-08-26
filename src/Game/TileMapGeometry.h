@@ -24,11 +24,9 @@ private:
 	VertexBuffer m_vertexBuf;
 	IndexBuffer m_indexBuf;
 	ShaderProgram m_shaderProgram;
-	//UniformVariable m_MatrixID;
 	UniformVariable m_modelMatrixID;
 	UniformVariable m_viewMatrixID;
 	UniformVariable m_projectionMatrixID;
 	UniformVariable m_color;
-
 	UniformVariable m_TextureID;
 };

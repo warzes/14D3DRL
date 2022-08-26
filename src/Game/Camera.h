@@ -34,6 +34,8 @@ public:
 	const glm::mat4& GetProjectionMatrix() const { return m_projectionMatrix; }
 	const glm::vec3& GetPosition() const { return m_position; }
 	const glm::vec3& GetDirection() const { return m_front; }
+	const glm::vec3& GetRight() const { return m_right; }
+	const float GetSpeed() const { return m_movementSpeed; }
 
 	Frustum ComputeFrustum() const;
 	//private:

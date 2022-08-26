@@ -36,7 +36,9 @@ Texture2D* TextureManager::GetTexture2D(const std::string& name)
 
 		Texture2DLoaderInfo textureLoaderInfo = {};
 		textureLoaderInfo.fileName = name;
-		//textureLoaderInfo.mipmap = false;
+#if TextureMipmapDisable
+		textureLoaderInfo.mipmap = false;
+#endif
 
 		Texture2D texture;
 		if (!texture.CreateFromFiles(textureLoaderInfo) || !texture.IsValid())

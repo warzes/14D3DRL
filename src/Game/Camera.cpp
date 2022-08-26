@@ -70,7 +70,7 @@ void Camera::SimpleMove(float deltaTime)
 
 	constexpr float speedRotateMod = 1600.0f;
 	if (IsKeyDown(Key::Right))
-		Rotate(speedRotateMod *deltaTime, 0.0f);
+		Rotate(speedRotateMod * deltaTime, 0.0f);
 	if (IsKeyDown(Key::Left))
 		Rotate(-speedRotateMod * deltaTime, 0.0f);
 

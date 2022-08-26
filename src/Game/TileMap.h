@@ -1,10 +1,7 @@
 ﻿#pragma once
 
-/*
-идея такая - карта разбита на ячейки, каждая ячейка содержит тайлы. Ячейки хранятся в файлах и выгружаются/загружаются по необходимости
-*/
-
 #include "TileMapGeometry.h"
+#include "GenMap.h"
 
 constexpr int SizeMap = 70;
 constexpr int SizeMapZ = 4;
@@ -25,8 +22,13 @@ public:
 
 	void Draw(const Camera& camera);
 
+	// x,y = player pos, z - rotate angle
+	glm::vec3 GetStartPlayerPos() const;
+
+	GenMap& GetMapTileData() { return m_map; }
+
 private:
 	TileMapGeometry m_tileGeometry;
-
+	GenMap m_map = GenMap(SizeMap, SizeMap);
 	TilesCell* m_tiles = nullptr;
 };
