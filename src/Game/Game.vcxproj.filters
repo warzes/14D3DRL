@@ -75,6 +75,15 @@
     <ClCompile Include="GenDungeon.cpp">
       <Filter>Generator</Filter>
     </ClCompile>
+    <ClCompile Include="ExploringLogic.cpp">
+      <Filter>Game\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleLogic.cpp">
+      <Filter>Game\Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -175,6 +184,15 @@
     <ClInclude Include="CollisionMath.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="ExploringLogic.h">
+      <Filter>Game\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleLogic.h">
+      <Filter>Game\Logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -212,6 +230,9 @@
     </Filter>
     <Filter Include="Generator">
       <UniqueIdentifier>{c3314c99-80c9-41ac-b3a0-1a9cf45dc9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Logic">
+      <UniqueIdentifier>{e120b160-159e-4c51-b069-69a7e5bc2099}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

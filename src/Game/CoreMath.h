@@ -142,7 +142,7 @@ public:
 	Vector4& operator+=(const Vector4& a) { x += a.x; y += a.y; z += a.z; w += a.w; return(*this); }
 	Vector4& operator-=(const Vector4& a) { x -= a.x; y -= a.y; z -= a.z; w -= a.w;  return(*this); }
 	Vector4& operator*=(float n) { x *= n; y *= n; z *= n; w *= n; return(*this); }
-	Vector4& operator/=(float n) { x /= n; y /= n; z /= n; w / n; return(*this); }
+	Vector4& operator/=(float n) { x /= n; y /= n; z /= n; w /= n; return(*this); }
 
 	//bool operator==(const Vector4& a);
 	//bool operator!=(const Vector4& a);

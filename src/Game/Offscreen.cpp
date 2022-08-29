@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Offscreen.h"
 #include "Vertex.h"
 #include "RenderResource.h"
@@ -156,7 +156,15 @@ void main()
 	//pos.x = floor(UV.x * PixelsX) / PixelsX;
 	//pos.y = floor(UV.y * PixelsY) / PixelsY;
 	//fragColor = texture( screenTexture, pos );
+	
 	fragColor = texture(screenTexture, UV);
+
+	//vec3 c = texture(screenTexture, UV).rgb;
+	//vec3 c1 = mix(vec3(0.0), c.rgb, 0.0625);
+	//c1.rgb = vec3(float(int(c1.r * 230.0)) / 230.0, float(int(c1.g * 230.0)) / 230.0, float(int(c1.b * 230.0)) / 230.0);
+	//c.rgb = mix(vec3(0.0), c1.rgb, 16.0);
+	//fragColor = vec4(c, 1.0);
+
 }
 )";
 //-----------------------------------------------------------------------------

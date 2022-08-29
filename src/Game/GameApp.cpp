@@ -4,11 +4,13 @@
 #include "Offscreen.h"
 #include "GameInput.h"
 #include "FreeMove.h"
+#include "GameLogic.h"
 //-----------------------------------------------------------------------------
 Camera camera;
 TileMap tileMap;
 Offscreen offscreen;
 extern bool IsEngineRun;
+GameLogic gameLogic;
 //-----------------------------------------------------------------------------
 bool GameAppInit()
 {
@@ -28,6 +30,8 @@ bool GameAppInit()
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 
+	gameLogic.SetLogicStage(GameLogicStage::Exploring);
+
 	return true;
 }
 //-----------------------------------------------------------------------------
@@ -40,8 +44,9 @@ void GameAppUpdate(float deltaTime)
 	}
 
 	FreeMove(camera, tileMap.GetMapTileData(), deltaTime, true);
-
 	camera.Update();
+
+	gameLogic.Update();
 }
 //-----------------------------------------------------------------------------
 void GameAppFrame()
