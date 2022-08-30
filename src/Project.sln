@@ -7,8 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DOC", "DOC", "{2E494674-C532-494D-8E47-CAB5CD2F8F06}"
 	ProjectSection(SolutionItems) = preProject
-		OtherIdea.md = OtherIdea.md
+		Game.md = Game.md
 		History.md = History.md
+		OtherIdea.md = OtherIdea.md
 	EndProjectSection
 EndProject
 Global

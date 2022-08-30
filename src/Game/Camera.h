@@ -56,7 +56,7 @@ private:
 	float m_pitch = 0.0f;
 
 	// camera options
-	float m_movementSpeed = 7.0f;
+	float m_movementSpeed = 5.0f;
 	float m_sensitivity = 0.1f;
 	float m_fov = 45.0f;
 	float m_near = 0.01f;

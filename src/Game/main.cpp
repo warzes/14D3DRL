@@ -26,6 +26,19 @@ void GameAppClose();
 //-----------------------------------------------------------------------------
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
+	float exponent = 1.5f;
+	float baseXP = 100.0;
+
+	for (int i = 0; i < 30; i++)
+	{
+		int t = floor(baseXP * pow((float)i, exponent));
+		puts(std::to_string(t).c_str());
+	}
+
+
+
+
+
 	Engine engine;
 
 	if (engine.Init())
