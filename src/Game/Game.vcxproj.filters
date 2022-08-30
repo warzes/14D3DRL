@@ -84,6 +84,12 @@
     <ClCompile Include="BattleLogic.cpp">
       <Filter>Game\Logic</Filter>
     </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>GameData\RPG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -193,6 +199,12 @@
     <ClInclude Include="BattleLogic.h">
       <Filter>Game\Logic</Filter>
     </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>GameData\RPG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -233,6 +245,12 @@
     </Filter>
     <Filter Include="Game\Logic">
       <UniqueIdentifier>{e120b160-159e-4c51-b069-69a7e5bc2099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{b8c45b8f-48d5-4d1b-ac2b-49afc831374f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameData\RPG">
+      <UniqueIdentifier>{9b00f826-c74b-4b91-bc7b-5439d8bec521}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

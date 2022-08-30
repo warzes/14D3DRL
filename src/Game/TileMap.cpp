@@ -13,6 +13,8 @@ bool TileMap::Init()
 
 	generator->generate(m_map, rng);
 
+	m_tilesDef.resize(SizeMap * SizeMap);
+
 	if (!m_tileGeometry.Init())
 		return false;
 
@@ -112,5 +114,15 @@ glm::vec3 TileMap::GetStartPlayerPos() const
 	}
 
 	return glm::vec3(0);
+}
+//-----------------------------------------------------------------------------
+void TileMap::SetTileVisible(int x, int y)
+{
+	m_tilesDef[x + y * SizeMap].isVisible = true;
+}
+//-----------------------------------------------------------------------------
+bool TileMap::GetTileVisible(int x, int y) const
+{
+	return m_tilesDef[x + y * SizeMap].isVisible;
 }
 //-----------------------------------------------------------------------------

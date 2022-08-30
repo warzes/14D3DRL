@@ -5,7 +5,7 @@
 GenMap::GenMap(int width, int height)
 	: width(width)
 	, height(height)
-	, tiles(width* height, GenTile::Unused)
+	, tiles(width* height)
 {
 }
 

@@ -202,9 +202,11 @@
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="GameInput.cpp" />
     <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="GenDungeon.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="GenMap.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Offscreen.cpp" />
@@ -241,12 +243,14 @@
     <ClInclude Include="FreeMove.h" />
     <ClInclude Include="GameInput.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GameUI.h" />
     <ClInclude Include="GenDungeon.h" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="GenMap.h" />
     <ClInclude Include="GenTile.h" />
     <ClInclude Include="GenUtils.h" />
     <ClInclude Include="GeometryMath.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Offscreen.h" />
     <ClInclude Include="OpenGLHeader.h" />

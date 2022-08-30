@@ -4,7 +4,7 @@
 #include "RenderResource.h"
 //-----------------------------------------------------------------------------
 // Game Boy Palette Mapping
-constexpr const char* GameBoyPaletteShader = R"(
+static constexpr const char* GameBoyPaletteShader = R"(
 #version 330 core
 
 in vec2 UV;
@@ -53,7 +53,7 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
-constexpr const char* Palette16FragmentShader = R"(
+static constexpr const char* Palette16FragmentShader = R"(
 #version 330 core
 
 in vec2 UV;
@@ -124,7 +124,7 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
-constexpr const char* OffscreenVertexShader = R"(
+static constexpr const char* OffscreenVertexShader = R"(
 #version 330 core
 
 layout(location = 0) in vec2 vertexPosition;
@@ -139,7 +139,7 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
-constexpr const char* OffscreenFragmentShader = R"(
+static constexpr const char* OffscreenFragmentShader = R"(
 #version 330 core
 
 in vec2 UV;
@@ -182,11 +182,11 @@ bool Offscreen::Init()
 #if TileMapSimpleTexture
 	m_fb.Create(320, 240);
 #else
-	m_fb.Create(800, 600);
+	m_fb.Create(320, 240);
 #endif
 
 	// Quad vertices
-	constexpr Vertex_Pos2_TexCoord quadVertices[] = {
+	static constexpr Vertex_Pos2_TexCoord quadVertices[] = {
 		{{-1.0f,  1.0f},  {0.0f, 1.0f}},
 		{{ 1.0f,  1.0f},  {1.0f, 1.0f}},
 		{{ 1.0f, -1.0f},  {1.0f, 0.0f}},
