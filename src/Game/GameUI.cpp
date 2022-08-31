@@ -24,11 +24,11 @@ static constexpr const char* fragmentShader = R"(
 
 out vec4 fragColor;
 
-uniform vec3 color;
+uniform vec4 color;
 
 void main()
 {
-	fragColor = vec4(color.x, color.y, color.z, 1.0);
+	fragColor = vec4(color.x, color.y, color.z, color.a);
 }
 )";
 
@@ -85,14 +85,35 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 	}
 
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_shaderProgramQuad.Bind();
 
+	{
+		static constexpr glm::vec4 color1 = glm::vec4(0.2f, 0.4f, 0.8f, 0.5f);
+		static constexpr glm::vec4 color2 = glm::vec4(0.4f, 0.8f, 0.8f, 0.5f);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(SizeMap+2, SizeMap+2, 1.0f));
+		glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_uiWidth - SizeMap/2.0f+1, SizeMap / 2.0f-1, 0.0f ));
+		glm::mat4 pm = m_ortho * translate * scale;
+		m_shaderProgramQuad.SetUniform(m_matrixID, pm);
+		m_shaderProgramQuad.SetUniform(m_colorID, color1);
+		m_vaoQuad.Draw();
+
+		scale = glm::scale(glm::mat4(1.0f), glm::vec3(SizeMap-1, SizeMap-1, 1.0f));
+		translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_uiWidth - SizeMap / 2.0f, SizeMap / 2.0f, 0.0f));
+		pm = m_ortho * translate * scale;
+		m_shaderProgramQuad.SetUniform(m_matrixID, pm);
+		m_shaderProgramQuad.SetUniform(m_colorID, color2);
+		m_vaoQuad.Draw();
+	}
+
+
 	glm::vec3 pos = glm::vec3{ 0 };
 
-	static constexpr glm::vec3 colorWall = glm::vec3(0.8f, 0.6f, 0.6f);
-	static constexpr glm::vec3 colorFloor = glm::vec3(1.0f, 0.8f, 0.8f);
-	static constexpr glm::vec3 colorPlayer = glm::vec3(0.2f, 0.4f, 0.8f);
+	static constexpr glm::vec4 colorWall = glm::vec4(0.8f, 0.6f, 0.6f, 1.0f);
+	static constexpr glm::vec4 colorFloor = glm::vec4(1.0f, 0.8f, 0.8f, 1.0f);
+	static constexpr glm::vec4 colorPlayer = glm::vec4(0.2f, 0.4f, 0.8f, 1.0f);
 
 	for (int x = 0; x < SizeMap; x++)
 	{
@@ -144,6 +165,6 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 	m_shaderProgramQuad.SetUniform(m_colorID, colorPlayer);
 	m_vaoQuad.Draw();
 
-
+	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 }

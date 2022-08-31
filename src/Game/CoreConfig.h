@@ -5,4 +5,4 @@
 #define TileMapSimpleTexture 1
 #define NewShader 0
 
-#define FullVisibleMap 0
+#define FullVisibleMap 1
