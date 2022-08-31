@@ -5,7 +5,7 @@
 GenMap::GenMap(int width, int height)
 	: width(width)
 	, height(height)
-	, tiles(width* height)
+	, m_tiles(static_cast<size_t>(width * height))
 {
 }
 
@@ -21,7 +21,7 @@ bool GenMap::isInBounds(const Point& pos) const
 
 void GenMap::setTile(int x, int y, GenTile tile)
 {
-	tiles[x + y * width] = tile;
+	m_tiles[static_cast<size_t>(x + y * width)] = tile;
 }
 
 void GenMap::setTile(const Point& pos, GenTile tile)
@@ -31,7 +31,7 @@ void GenMap::setTile(const Point& pos, GenTile tile)
 
 GenTile GenMap::getTile(int x, int y) const
 {
-	return tiles[x + y * width];
+	return m_tiles[static_cast<size_t>(x + y * width)];
 }
 
 GenTile GenMap::getTile(const Point& pos) const
@@ -41,15 +41,15 @@ GenTile GenMap::getTile(const Point& pos) const
 
 void GenMap::fill(GenTile tile)
 {
-	std::fill(tiles.begin(), tiles.end(), tile);
+	std::fill(m_tiles.begin(), m_tiles.end(), tile);
 }
 
 void GenMap::move(std::vector<GenTile>&& tiles)
 {
-	this->tiles = std::move(tiles);
+	m_tiles = std::move(tiles);
 }
 
 std::vector<GenTile> GenMap::copy()
 {
-	return tiles;
+	return m_tiles;
 }

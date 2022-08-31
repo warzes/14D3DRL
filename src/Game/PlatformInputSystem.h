@@ -150,7 +150,7 @@ public:
 private:
 	void initKeytable();
 
-	Keycode m_keycodes[MAX_KEYCODES];
+	Keycode m_keycodes[MAX_KEYCODES] = {};
 };
 
 extern InputSystem* gInputSystem;

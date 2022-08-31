@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "BattleLogic.h"
+#include "TradeLogic.h"
 #include "GameLogic.h"
 //-----------------------------------------------------------------------------
-void BattleLogic::Start(GameLogic* logicMgr)
+void TradeLogic::Start(GameLogic* logicMgr)
 {
 	m_logicMgr = logicMgr;
-	puts("Battle Logic Start");
+	puts("Trade Logic Start");
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Stop()
+void TradeLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Update()
+void TradeLogic::Update()
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Draw()
+void TradeLogic::Draw()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::DrawUI()
+void TradeLogic::DrawUI()
 {
 }
 //-----------------------------------------------------------------------------

@@ -11,6 +11,8 @@ InputSystem::InputSystem()
 {
 	assert(!gInputSystem);
 	gInputSystem = this;
+
+	initKeytable();
 }
 //-----------------------------------------------------------------------------
 InputSystem::~InputSystem()
@@ -20,8 +22,6 @@ InputSystem::~InputSystem()
 //-----------------------------------------------------------------------------
 bool InputSystem::Create()
 {
-	initKeytable();
-
 	return true;
 }
 //-----------------------------------------------------------------------------

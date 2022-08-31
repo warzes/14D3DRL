@@ -44,9 +44,12 @@ bool Player_TestCollision(const Vector3& newPlayerPos, const GenMap& map)
 
 				if (map.getTile(x, y) == GenTile::Wall)
 				{
-					BoundingBox blockB = { {-0.5f, -0.5f, -0.5f}, {0.5f, 0.5f, 0.5f} };
-					blockB.min += Vector3(x, 0.0f, y);
-					blockB.max += Vector3(x, 1.0f, y);
+					const float fx = static_cast<float>(x);
+					const float fy = static_cast<float>(y);
+					const BoundingBox blockB = {
+						{-0.5f + fx, 0.0f, -0.5f + fy}, // min
+						{ 0.5f + fx, 1.0f,  0.5f + fy}  // max
+					};
 
 					if (CheckCollisionBoxes(pB, blockB)) 
 						return true;

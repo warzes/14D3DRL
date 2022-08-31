@@ -52,8 +52,8 @@ void GameAppUpdate(float deltaTime)
 	camera.Update();
 
 	// set tile visible
-	int px = camera.GetPosition().x;
-	int py = camera.GetPosition().z;
+	const int px = static_cast<int>(floor(camera.GetPosition().x));
+	const int py = static_cast<int>(floor(camera.GetPosition().z));
 
 	for (int x = px - 4; x < px + 4; x++)
 	{
@@ -71,11 +71,14 @@ void GameAppUpdate(float deltaTime)
 void GameAppFrame()
 {
 	offscreen.Bind();
-	tileMap.Draw(camera);
-	
+	{
+		tileMap.Draw(camera);
+		gameLogic.Draw();
+	}
 	offscreen.DrawToScreen();
 
 	gameUI.Draw(camera.GetPosition(), tileMap);
+	gameLogic.DrawUI();
 }
 //-----------------------------------------------------------------------------
 void GameAppClose()

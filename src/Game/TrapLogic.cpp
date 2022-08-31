@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "BattleLogic.h"
+#include "TrapLogic.h"
 #include "GameLogic.h"
 //-----------------------------------------------------------------------------
-void BattleLogic::Start(GameLogic* logicMgr)
+void TrapLogic::Start(GameLogic* logicMgr)
 {
 	m_logicMgr = logicMgr;
-	puts("Battle Logic Start");
+	puts("Trap Logic Start");
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Stop()
+void TrapLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Update()
+void TrapLogic::Update()
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Draw()
+void TrapLogic::Draw()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::DrawUI()
+void TrapLogic::DrawUI()
 {
 }
 //-----------------------------------------------------------------------------

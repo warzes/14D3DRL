@@ -18,9 +18,6 @@
     <ClCompile Include="RenderDevice.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="OpenGLHeader.cpp">
-      <Filter>Engine\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="RenderResource.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
@@ -90,6 +87,15 @@
     <ClCompile Include="Hero.cpp">
       <Filter>GameData\RPG</Filter>
     </ClCompile>
+    <ClCompile Include="TradeLogic.cpp">
+      <Filter>Game\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="ChestLogic.cpp">
+      <Filter>Game\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapLogic.cpp">
+      <Filter>Game\Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -103,9 +109,6 @@
       <Filter>Engine\Engine</Filter>
     </ClInclude>
     <ClInclude Include="RenderDevice.h">
-      <Filter>Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGLHeader.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="RenderResource.h">
@@ -204,6 +207,18 @@
     </ClInclude>
     <ClInclude Include="Hero.h">
       <Filter>GameData\RPG</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSceneLogic.h">
+      <Filter>Game\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="TradeLogic.h">
+      <Filter>Game\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="ChestLogic.h">
+      <Filter>Game\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapLogic.h">
+      <Filter>Game\Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

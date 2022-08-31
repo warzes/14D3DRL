@@ -5,7 +5,7 @@
 #include "CoreMath.h"
 
 class Camera;
-class TilesCell;
+struct TilesCell;
 class SimpleFrustum;
 
 class TileMapGeometry

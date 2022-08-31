@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "BattleLogic.h"
+#include "ChestLogic.h"
 #include "GameLogic.h"
 //-----------------------------------------------------------------------------
-void BattleLogic::Start(GameLogic* logicMgr)
+void ChestLogic::Start(GameLogic* logicMgr)
 {
 	m_logicMgr = logicMgr;
-	puts("Battle Logic Start");
+	puts("Chest Logic Start");
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Stop()
+void ChestLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Update()
+void ChestLogic::Update()
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Draw()
+void ChestLogic::Draw()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::DrawUI()
+void ChestLogic::DrawUI()
 {
 }
 //-----------------------------------------------------------------------------

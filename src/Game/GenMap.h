@@ -28,5 +28,5 @@ public:
 	const int width, height;
 
 private:
-	std::vector<GenTile> tiles;
+	std::vector<GenTile> m_tiles;
 };

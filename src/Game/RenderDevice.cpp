@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "RenderDevice.h"
 #include "Log.h"
-#include "OpenGLHeader.h"
 //-----------------------------------------------------------------------------
 extern "C"
 {

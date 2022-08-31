@@ -104,7 +104,7 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 			bool isVisible = false;
 
 			pos.x = m_uiWidth - SizeMap + x;
-			pos.y = y;
+			pos.y = static_cast<float>(y);
 
 			switch (map.GetMapTileData().getTile(x, y))
 			{

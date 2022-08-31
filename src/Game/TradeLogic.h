@@ -2,7 +2,7 @@
 
 #include "GameSceneLogic.h"
 
-class BattleLogic final : public GameSceneLogic
+class TradeLogic final : public GameSceneLogic
 {
 public:
 	void Start(GameLogic* logicMgr) final;

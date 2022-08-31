@@ -14,6 +14,10 @@ void ExploringLogic::Start(GameLogic* logicMgr)
 	puts("Exploring Logic Start");
 }
 
+void ExploringLogic::Stop()
+{
+}
+
 void ExploringLogic::Update()
 {
 	m_dist += glm::distance(camera.GetPosition(), m_oldPlayerPos);
@@ -28,4 +32,12 @@ void ExploringLogic::Update()
 		if (r < 3)
 			m_logicMgr->SetLogicStage(GameLogicStage::Battle);
 	}
+}
+
+void ExploringLogic::Draw()
+{
+}
+
+void ExploringLogic::DrawUI()
+{
 }
