@@ -96,6 +96,9 @@
     <ClCompile Include="TrapLogic.cpp">
       <Filter>Game\Logic</Filter>
     </ClCompile>
+    <ClCompile Include="PlatformWindowEvents.cpp">
+      <Filter>Engine\Platform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -129,7 +132,7 @@
     <ClInclude Include="..\3rdparty\glad\gl.h">
       <Filter>3rdparty</Filter>
     </ClInclude>
-    <ClInclude Include="CoreMath.h">
+    <ClInclude Include="MathCore.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="PlatformUtility.h">
@@ -159,7 +162,7 @@
     <ClInclude Include="Tile.h">
       <Filter>GameData</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryMath.h">
+    <ClInclude Include="MathGeometry.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Generator.h">
@@ -190,7 +193,7 @@
     <ClInclude Include="FreeMove.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionMath.h">
+    <ClInclude Include="MathCollision.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="ExploringLogic.h">
@@ -219,6 +222,9 @@
     </ClInclude>
     <ClInclude Include="TrapLogic.h">
       <Filter>Game\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWindowEvents.h">
+      <Filter>Engine\Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

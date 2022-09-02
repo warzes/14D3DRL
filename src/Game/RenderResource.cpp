@@ -29,8 +29,8 @@ bool ShaderProgram::CreateFromMemories(const std::string& vertexShaderMemory, co
 	if (vertexShaderMemory == "" || fragmentShaderMemory == "") return false;
 	if (m_id > 0) Destroy();
 
-	GLuint shaderVertex = createShader(GL_VERTEX_SHADER, vertexShaderMemory);
-	GLuint shaderFragment = createShader(GL_FRAGMENT_SHADER, fragmentShaderMemory);
+	const GLuint shaderVertex = createShader(GL_VERTEX_SHADER, vertexShaderMemory);
+	const GLuint shaderFragment = createShader(GL_FRAGMENT_SHADER, fragmentShaderMemory);
 
 	m_id = glCreateProgram();
 	glAttachShader(m_id, shaderVertex);
@@ -41,9 +41,12 @@ bool ShaderProgram::CreateFromMemories(const std::string& vertexShaderMemory, co
 	glGetProgramiv(m_id, GL_LINK_STATUS, &success);
 	if (success == GL_FALSE)
 	{
-		char log[512];
-		glGetProgramInfoLog(m_id, 512, nullptr, log);
-		LogError(("OPENGL: Shader program linking failed: " + std::string(log)).c_str());
+		GLint errorMsgLen;
+		glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &errorMsgLen);
+
+		std::vector<GLchar> errorInfo(errorMsgLen);
+		glGetProgramInfoLog(m_id, errorInfo.size(), nullptr, &errorInfo[0]);
+		LogError(("OPENGL: Shader program linking failed: " + std::string(&errorInfo[0])).c_str());
 		glDeleteProgram(m_id);
 		m_id = 0;
 	}
@@ -170,10 +173,12 @@ GLuint ShaderProgram::createShader(GLenum type, const std::string& source) const
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
 	if (success == GL_FALSE)
 	{
-		GLchar infoLog[512];
-		glGetShaderInfoLog(shaderId, 512, nullptr, infoLog);
+		GLint infoLogSize;
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogSize);
+		std::vector<GLchar> errorInfo(infoLogSize);
+		glGetShaderInfoLog(shaderId, errorInfo.size(), nullptr, &errorInfo[0]);
 		glDeleteShader(shaderId);
-		const std::string msg = "Shader compilation failed : " + std::string(infoLog) + ", Source: " + source;
+		const std::string msg = "Shader compilation failed : " + std::string(&errorInfo[0]) + ", Source: " + source;
 		LogError(msg.c_str());
 		return 0;
 	}

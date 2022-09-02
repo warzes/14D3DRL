@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CoreMath.h"
+#include "MathCore.h"
 
 struct BoundingBox
 {

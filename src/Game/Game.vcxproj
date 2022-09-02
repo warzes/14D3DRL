@@ -212,6 +212,7 @@
     <ClCompile Include="Offscreen.cpp" />
     <ClCompile Include="PlatformInputSystem.cpp" />
     <ClCompile Include="PlatformUtility.cpp" />
+    <ClCompile Include="PlatformWindowEvents.cpp" />
     <ClCompile Include="PlatformWindowSystem.cpp" />
     <ClCompile Include="RenderDevice.cpp" />
     <ClCompile Include="RenderResource.cpp" />
@@ -235,9 +236,9 @@
     <ClInclude Include="..\3rdparty\glad\wgl.h" />
     <ClInclude Include="BattleLogic.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CollisionMath.h" />
+    <ClInclude Include="MathCollision.h" />
     <ClInclude Include="CoreConfig.h" />
-    <ClInclude Include="CoreMath.h" />
+    <ClInclude Include="MathCore.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="DrawPrimitive.h" />
     <ClInclude Include="Engine.h" />
@@ -252,12 +253,13 @@
     <ClInclude Include="GenMap.h" />
     <ClInclude Include="GenTile.h" />
     <ClInclude Include="GenUtils.h" />
-    <ClInclude Include="GeometryMath.h" />
+    <ClInclude Include="MathGeometry.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Offscreen.h" />
     <ClInclude Include="PlatformInputSystem.h" />
     <ClInclude Include="PlatformUtility.h" />
+    <ClInclude Include="PlatformWindowEvents.h" />
     <ClInclude Include="PlatformWindowSystem.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="RenderResource.h" />

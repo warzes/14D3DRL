@@ -2,7 +2,7 @@
 
 #include "Camera.h"
 #include "GameInput.h"
-#include "CollisionMath.h"
+#include "MathCollision.h"
 #include "GenMap.h"
 
 inline void PlayerRotateView(Camera& cam, float deltaTime)

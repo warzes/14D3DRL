@@ -16,25 +16,36 @@ public:
 	constexpr Vector2& operator=(Vector2&&) = default;
 	constexpr Vector2& operator=(const Vector2&) = default;
 
-	//bool operator==(const Vector2& a);
-	//bool operator!=(const Vector2& a);
+	//bool operator==(const Vector2& v);
+	//bool operator!=(const Vector2& v);
 	
-	Vector2 operator+(const Vector2& a) const { return { x + a.x, y + a.y }; }
-	Vector2 operator-(const Vector2& a) const { return { x - a.x, y - a.y }; }
+	Vector2 operator+(float f) const { return { x + f, y + f }; }
+	Vector2 operator+(const Vector2& v) const { return { x + v.x, y + v.y }; }
 	Vector2 operator-() const { return { -x, -y }; }
-	Vector2 operator*(const Vector2& a) const { return { x * a.x, y * a.y }; }
-	Vector2 operator*(float n) const { return { x * n, y * n }; }
-	Vector2 operator/(float n) const { return { x / n, y / n }; }
-	Vector2& operator+=(const Vector2& a) { x += a.x; y += a.y; return(*this); }
-	Vector2& operator-=(const Vector2& a) { x -= a.x; y -= a.y; return(*this); }
-	Vector2& operator*=(float n) { x *= n; y *= n; return(*this); }
-	Vector2& operator/=(float n) { x /= n; y /= n; return(*this); }
+	Vector2 operator-(float f) const { return { x - f, y - f }; }
+	Vector2 operator-(const Vector2& v) const { return { x - v.x, y - v.y }; }
+	Vector2 operator*(float f) const { return { x * f, y * f }; }
+	Vector2 operator*(const Vector2& v) const { return { x * v.x, y * v.y }; }
+	Vector2 operator/(float f) const { return { x / f, y / f }; }
+	Vector2& operator+=(const Vector2& v) { x += v.x; y += v.y; return(*this); }
+	Vector2& operator-=(const Vector2& v) { x -= v.x; y -= v.y; return(*this); }
+	Vector2& operator*=(float f) { x *= f; y *= f; return(*this); }
+	Vector2& operator/=(float f) { x /= f; y /= f; return(*this); }
 
-	//float& operator[](int Index) { return (*x)[Index]; }
+	float* operator&() { return (float*)this; };
+	operator float*() { return &x; }
+	operator const float*() const { return &x; }
 
-	float GetLength() const;
-	Vector2 Normalize() const;
-	float DotProduct(const Vector2& a) const;
+	float operator[](size_t i) { return (&x)[i]; }
+	const float operator[](size_t i) const { return (&x)[i]; }
+
+	void Set(float nx, float ny) { x = nx; y = ny; }
+
+	[[nodiscard]] float GetLength() const;
+	[[nodiscard]] float GetLengthSquared() const;
+	[[nodiscard]] Vector2 Normalize() const;
+	[[nodiscard]] float Distance(const Vector2& v) const;
+	[[nodiscard]] float DotProduct(const Vector2& v) const;
 
 	float x = 0.0f;
 	float y = 0.0f;
@@ -42,19 +53,32 @@ public:
 
 inline float Vector2::GetLength() const
 {
-	return sqrtf(x * x + y * y);
+	return sqrt(x * x + y * y);
+}
+
+inline float Vector2::GetLengthSquared() const
+{
+	return x * x + y * y;
 }
 
 inline Vector2 Vector2::Normalize() const
 {
-	const float d = 1.0f / sqrt(x * x + y * y);
-	return { x * d, y * d };
+	const float invLen = 1.0f / sqrt(x * x + y * y);
+	return { x * invLen, y * invLen };
 }
 
-inline float Vector2::DotProduct(const Vector2& a) const
+inline float Vector2::Distance(const Vector2& v) const
 {
-	return x * a.x + y * a.y;
+	return (*this - v).GetLength();
 }
+
+inline float Vector2::DotProduct(const Vector2& v) const
+{
+	return x * v.x + y * v.y;
+}
+
+inline Vector2 operator*(float lhs, const Vector2& rhs) { return rhs * lhs; }
+inline Vector2 operator+(float lhs, const Vector2& rhs) { return rhs + lhs; }
 
 //=============================================================================
 // Vector3
@@ -72,24 +96,37 @@ public:
 	constexpr Vector3& operator=(Vector3&&) = default;
 	constexpr Vector3& operator=(const Vector3&) = default;
 
-	//bool operator==(const Vector3& a);
-	//bool operator!=(const Vector3& a);
+	//bool operator==(const Vector3& v);
+	//bool operator!=(const Vector3& v);
 
-	Vector3 operator+(const Vector3& a) const { return { x + a.x, y + a.y, z + a.z }; }
-	Vector3 operator-(const Vector3& a) const { return { x - a.x, y - a.y, z - a.z }; }
+	Vector3 operator+(float f) const { return { x + f, y + f, z + f }; }
+	Vector3 operator+(const Vector3& v) const { return { x + v.x, y + v.y, z + v.z }; }
 	Vector3 operator-() const { return { -x, -y, -z }; }
-	Vector3 operator*(const Vector3& a) const { return { x * a.x, y * a.y, z * a.z }; }
-	Vector3 operator*(float n) const { return { x * n, y * n, z * n }; }
-	Vector3 operator/(float n) const { return { x / n, y / n, z / n }; }
-	Vector3& operator+=(const Vector3& a) { x += a.x; y += a.y; z += a.z; return(*this); }
-	Vector3& operator-=(const Vector3& a) { x -= a.x; y -= a.y; z -= a.z; return(*this); }
+	Vector3 operator-(float f) const { return { x - f, y - f, z - f }; }
+	Vector3 operator-(const Vector3& v) const { return { x - v.x, y - v.y, z - v.z }; }
+	Vector3 operator*(float f) const { return { x * f, y * f, z * f }; }
+	Vector3 operator*(const Vector3& v) const { return { x * v.x, y * v.y, z * v.z }; }
+	Vector3 operator/(float f) const { return { x / f, y / f, z / f }; }
+	Vector3& operator+=(const Vector3& v) { x += v.x; y += v.y; z += v.z; return(*this); }
+	Vector3& operator-=(const Vector3& v) { x -= v.x; y -= v.y; z -= v.z; return(*this); }
 	Vector3& operator*=(float n) { x *= n; y *= n; z *= n; return(*this); }
 	Vector3& operator/=(float n) { x /= n; y /= n; z /= n; return(*this); }
 
-	float GetLength() const;
-	Vector3 Normalize() const;
-	float DotProduct(const Vector3& a) const;
-	Vector3 CrossProduct(const Vector3& vector) const;
+	float* operator&() { return (float*)this; }
+	operator float*() { return &x; }
+	operator const float*() const { return &x; }
+
+	float operator[](size_t i) { return (&x)[i]; }
+	const float operator[](size_t i) const { return (&x)[i]; }
+
+	void Set(float nx, float ny, float nz) { x = nx; y = ny; z = nz; }
+
+	[[nodiscard]] float GetLength() const;
+	[[nodiscard]] float GetLengthSquared() const;
+	[[nodiscard]] float Distance(const Vector3& v) const;
+	[[nodiscard]] Vector3 Normalize() const;
+	[[nodiscard]] float DotProduct(const Vector3& v) const;
+	[[nodiscard]] Vector3 CrossProduct(const Vector3& vector) const;
 
 	float x = 0.0f;
 	float y = 0.0f;
@@ -98,24 +135,40 @@ public:
 
 inline float Vector3::GetLength() const
 {
-	return sqrtf(x * x + y * y + z * z);
+	return sqrt(x * x + y * y + z * z);
+}
+
+inline float Vector3::GetLengthSquared() const
+{
+	return x * x + y * y + z * z;
+}
+
+inline float Vector3::Distance(const Vector3& v) const
+{
+	return (*this - v).GetLength();
 }
 
 inline Vector3 Vector3::Normalize() const
 {
-	const float d = 1.0f / sqrt(x * x + y * y + z * z);
-	return { x * d, y * d, z * d };
+	const float invLen = 1.0f / sqrt(x * x + y * y + z * z);
+	return { x * invLen, y * invLen, z * invLen };
 }
 
-inline float Vector3::DotProduct(const Vector3& a) const
+inline float Vector3::DotProduct(const Vector3& v) const
 {
-	return x * a.x + y * a.y + z * a.z;
+	return x * v.x + y * v.y + z * v.z;
 }
 
-inline Vector3 Vector3::CrossProduct(const Vector3& vector) const
+inline Vector3 Vector3::CrossProduct(const Vector3& v) const
 {
-	return { y * vector.z - z * vector.y, z * vector.x - x * vector.z, x * vector.y - y * vector.x };
+	return { 
+		y * v.z - z * v.y, 
+		z * v.x - x * v.z, 
+		x * v.y - y * v.x };
 }
+
+inline Vector3 operator+(float lhs, const Vector3& rhs) { return rhs + lhs; }
+inline Vector3 operator*(float lhs, const Vector3& rhs) { return rhs * lhs; }
 
 //=============================================================================
 // Vector4

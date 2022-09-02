@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "GameInput.h"
 #include "PlatformUtility.h"
+#include "PlatformWindowEvents.h"
 #if defined(_WIN32)
 //-----------------------------------------------------------------------------
 extern void LockMouse(bool lock);
@@ -76,14 +77,14 @@ inline void initDpi()
 {
 	DECLARE_HANDLE(DPI_AWARENESS_CONTEXT_T);
 	typedef BOOL(WINAPI* SETPROCESSDPIAWARE_T)();
-	typedef bool (WINAPI* SETPROCESSDPIAWARENESSCONTEXT_T)(DPI_AWARENESS_CONTEXT_T); // since Windows 10, version 1703
+	typedef bool (WINAPI* SETPROCESSDPIAWARENESSCONTEXT_T)(DPI_AWARENESS_CONTEXT_T);
 	typedef HRESULT(WINAPI* SETPROCESSDPIAWARENESS_T)(PROCESS_DPI_AWARENESS);
 	typedef HRESULT(WINAPI* GETDPIFORMONITOR_T)(HMONITOR, MONITOR_DPI_TYPE, UINT*, UINT*);
 
-	SETPROCESSDPIAWARE_T fn_setprocessdpiaware = 0;
-	SETPROCESSDPIAWARENESS_T fn_setprocessdpiawareness = 0;
-	GETDPIFORMONITOR_T fn_getdpiformonitor = 0;
-	SETPROCESSDPIAWARENESSCONTEXT_T fn_setprocessdpiawarenesscontext = 0;
+	SETPROCESSDPIAWARE_T fn_setprocessdpiaware = nullptr;
+	SETPROCESSDPIAWARENESS_T fn_setprocessdpiawareness = nullptr;
+	GETDPIFORMONITOR_T fn_getdpiformonitor = nullptr;
+	SETPROCESSDPIAWARENESSCONTEXT_T fn_setprocessdpiawarenesscontext = nullptr;
 
 	HINSTANCE user32 = LoadLibrary(L"user32.dll");
 	if (user32)
@@ -161,7 +162,7 @@ inline void initDpi()
 	if (shcore)  FreeLibrary(shcore);
 }
 //-----------------------------------------------------------------------------
-void dpiChanged(HWND hWnd, LPRECT proposed_win_rect)
+inline void dpiChanged(HWND hWnd, LPRECT proposed_win_rect)
 {
 	// called on WM_DPICHANGED, which will only be sent to the application if sapp_desc.high_dpi is true and the Windows version is recent enough to support DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 	assert(HighDpi);
@@ -188,66 +189,7 @@ void dpiChanged(HWND hWnd, LPRECT proposed_win_rect)
 	FreeLibrary(user32);
 }
 //-----------------------------------------------------------------------------
-void WindowEventIconified()
-{
-	std::string str = "window iconified";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void WindowEventRestored()
-{
-	std::string str = "window restored";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void WindowEventFocused()
-{
-	std::string str = "window focused";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void WindowEventUnFocused()
-{
-	std::string str = "window unfocused";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void WindowEventSize(int width, int height)
-{
-	std::string str = "window resize(";
-	str += std::to_string(width);
-	str += ":";
-	str += std::to_string(height);
-	str += ")";
-	puts(str.c_str());
-
-	WindowWidth = std::max(1, width);
-	WindowHeight = std::max(1, height);
-}
-//-----------------------------------------------------------------------------
-void MouseEventEnter()
-{
-	std::string str = "mouse enter";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void MouseEventLeave()
-{
-	std::string str = "mouse leave";
-	puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-void MouseEventMove(int posX, int posY)
-{
-	std::string str = "mouse move(";
-	str += std::to_string(posX);
-	str += ":";
-	str += std::to_string(posY);
-	str += ")";
-	//puts(str.c_str());
-}
-//-----------------------------------------------------------------------------
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK windowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	wchar_t mesgt[32];
 	switch (uMsg)
@@ -285,6 +227,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				WindowEventRestored();
 		}
 		WindowEventSize(/*width*/LOWORD(lParam), /*height*/HIWORD(lParam));
+		WindowWidth = std::max(1, static_cast<int>(LOWORD(lParam)));
+		WindowHeight = std::max(1, static_cast<int>(HIWORD(lParam)));
 	}
 	break;
 
@@ -479,11 +423,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 //-----------------------------------------------------------------------------
-bool RegisterWindowClass()
+bool registerWindowClass()
 {
 	WNDCLASS wc = { };
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc = WindowProc;
+	wc.lpfnWndProc = windowProc;
 	wc.hInstance = hInstance;
 	wc.lpszClassName = CLASS_NAME;
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
@@ -498,7 +442,7 @@ bool RegisterWindowClass()
 	return true;
 }
 //-----------------------------------------------------------------------------
-bool windowUpdateDimensions()
+inline bool windowUpdateDimensions()
 {
 	RECT rect;
 	if (GetClientRect(hWnd, &rect))
@@ -533,7 +477,7 @@ bool windowUpdateDimensions()
 	return false;
 }
 //-----------------------------------------------------------------------------
-void setFullscreen(bool fullscreen, UINT swp_flags)
+inline void setFullscreen(bool fullscreen, UINT swpFlags)
 {
 	HMONITOR monitor = MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST);
 	MONITORINFO minfo = { 0 };
@@ -568,7 +512,7 @@ void setFullscreen(bool fullscreen, UINT swp_flags)
 	const int win_x = rect.left;
 	const int win_y = rect.top;
 	SetWindowLongPtr(hWnd, GWL_STYLE, win_style);
-	SetWindowPos(hWnd, HWND_TOP, win_x, win_y, win_w, win_h, swp_flags | SWP_FRAMECHANGED);
+	SetWindowPos(hWnd, HWND_TOP, win_x, win_y, win_w, win_h, swpFlags | SWP_FRAMECHANGED);
 }
 //-----------------------------------------------------------------------------
 bool WindowSystem::Create(const WindowSystemCreateInfo& createInfo)
@@ -578,7 +522,7 @@ bool WindowSystem::Create(const WindowSystemCreateInfo& createInfo)
 
 	hInstance = GetModuleHandle(nullptr);
 
-	if (!RegisterWindowClass())
+	if (!registerWindowClass())
 	{
 		LogFatal("RegisterWindowClass() failed!");
 		return false;
@@ -588,17 +532,18 @@ bool WindowSystem::Create(const WindowSystemCreateInfo& createInfo)
 	utility::Utf8ToWide(createInfo.Title, wndTitle, 128);
 
 	const DWORD win_ex_style = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-	DWORD win_style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SIZEBOX;
+	const DWORD win_style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SIZEBOX;
 
 
 	RECT rect = { 0, 0, 0, 0 };
-	rect.right = (int)((float)createInfo.Width * Dpi.window_scale);
-	rect.bottom = (int)((float)createInfo.Height * Dpi.window_scale);
-	const bool use_default_width = 0 == createInfo.Width;
-	const bool use_default_height = 0 == createInfo.Height;
+	rect.right = static_cast<LONG>(static_cast<float>(createInfo.Width) * Dpi.window_scale);
+	rect.bottom = static_cast<LONG>(static_cast<float>(createInfo.Height) * Dpi.window_scale);
 	AdjustWindowRectEx(&rect, win_style, FALSE, win_ex_style);
 	const int win_width = rect.right - rect.left;
 	const int win_height = rect.bottom - rect.top;
+
+	const bool use_default_width = 0 == createInfo.Width;
+	const bool use_default_height = 0 == createInfo.Height;
 
 	hWnd = CreateWindowEx(win_ex_style, CLASS_NAME, wndTitle, win_style,
 		CW_USEDEFAULT, CW_USEDEFAULT,
@@ -626,6 +571,11 @@ bool WindowSystem::Create(const WindowSystemCreateInfo& createInfo)
 //-----------------------------------------------------------------------------
 void WindowSystem::Destroy()
 {
+	if (Fullscreen)
+	{
+		ChangeDisplaySettings(nullptr, CDS_RESET);
+		ShowCursor(TRUE);
+	}
 	DestroyWindow(hWnd); hWnd = nullptr;
 	UnregisterClass(CLASS_NAME, hInstance);
 }
@@ -658,8 +608,18 @@ WindowSystem::~WindowSystem()
 	gWindowSystem = nullptr;
 }
 //-----------------------------------------------------------------------------
-float GetScreenAspect()
+float GetWindowAspect()
 {
 	return (float)WindowWidth/(float)WindowHeight;
+}
+//-----------------------------------------------------------------------------
+int GetWindowWidth()
+{
+	return WindowWidth;
+}
+//-----------------------------------------------------------------------------
+int GetWindowHeight()
+{
+	return WindowHeight;
 }
 //-----------------------------------------------------------------------------

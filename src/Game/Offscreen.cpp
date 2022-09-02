@@ -168,8 +168,8 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
-extern int WindowWidth;
-extern int WindowHeight;
+int GetWindowWidth();
+int GetWindowHeight();
 //-----------------------------------------------------------------------------
 bool Offscreen::Init()
 {
@@ -225,7 +225,7 @@ void Offscreen::DrawToScreen()
 {
 	// Main Screen
 	FrameBuffer::MainFrameBufferBind();
-	glViewport(0, 0, WindowWidth, WindowHeight);
+	glViewport(0, 0, GetWindowWidth(), GetWindowHeight());
 	m_shaderProgramQuad.Bind();
 	m_fb.BindTextureBuffer();
 	m_vaoQuad.Draw();

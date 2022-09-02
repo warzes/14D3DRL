@@ -2,7 +2,7 @@
 #include "Camera.h"
 #include "GameInput.h"
 //-----------------------------------------------------------------------------
-extern float GetScreenAspect();
+extern float GetWindowAspect();
 //-----------------------------------------------------------------------------
 void Camera::MoveForward(float deltaTime, float speedMod)
 {
@@ -91,7 +91,7 @@ void Camera::SimpleMove(float deltaTime)
 //-----------------------------------------------------------------------------
 void Camera::Update()
 {
-	m_projectionMatrix = glm::perspective(glm::radians(m_fov), GetScreenAspect(), m_near, m_far);
+	m_projectionMatrix = glm::perspective(glm::radians(m_fov), GetWindowAspect(), m_near, m_far);
 	m_viewMatrix = glm::lookAt(m_position, m_position + m_front, m_up);
 }
 //-----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ Frustum Camera::ComputeFrustum() const
 	Frustum frustum;
 
 	const float halfVSide = m_far * tanf(m_fov * 0.5f);
-	const float halfHSide = halfVSide * GetScreenAspect();
+	const float halfHSide = halfVSide * GetWindowAspect();
 	const glm::vec3 frontMultFar = m_far * m_front;
 
 	frustum.nearFace = { m_position + m_near * m_front, m_front };

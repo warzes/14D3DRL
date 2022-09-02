@@ -14,9 +14,6 @@ extern "C"
 }
 //-----------------------------------------------------------------------------
 extern HWND hWnd;
-extern bool Fullscreen;
-extern int WindowWidth;
-extern int WindowHeight;
 //-----------------------------------------------------------------------------
 HDC hDC = nullptr;
 HGLRC hRC = nullptr;
@@ -109,12 +106,6 @@ bool RenderDevice::Create()
 //-----------------------------------------------------------------------------
 void RenderDevice::Destroy()
 {
-	if (Fullscreen)
-	{
-		ChangeDisplaySettings(nullptr, CDS_RESET);
-		ShowCursor(TRUE);
-	}
-
 	if (hRC)
 	{
 		wglMakeCurrent(nullptr, nullptr);
@@ -127,7 +118,6 @@ void RenderDevice::Destroy()
 //-----------------------------------------------------------------------------
 void RenderDevice::Clear()
 {
-	glViewport(0, 0, WindowWidth, WindowHeight);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 //-----------------------------------------------------------------------------

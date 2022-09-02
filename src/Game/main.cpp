@@ -1,24 +1,22 @@
 ﻿#include "stdafx.h"
 #include "Engine.h"
-#include "CoreMath.h"
-//ProceduralMapGenerator
-
-//https://github.com/davemoore22/sorcery
-//https://www.youtube.com/channel/UCEkmGGFyxu5vH6xAHej3Dag/videos
-//https://github.com/TheFakeMontyOnTheRun/dungeons-of-noudar
-//https://github.com/afritz1/OpenTESArena
-//https://www.youtube.com/watch?v=4siUM7CmQ0M&list=WL&index=230&t=154s
-//https://www.youtube.com/channel/UCfNlxHHR7Ucwspu_p9mepzw/videos
-//https://github.com/erkkah/tigr/blob/master/src/tigr_win.c
-//https://github.com/sentrip/tinyvk/tree/master/src
-//https://github.com/laleksic/tiny_csg
-//https://github.com/SFML/SFML
-//https://zeux.io/2019/01/17/is-c-fast/
+#include "MathCore.h"
 //-----------------------------------------------------------------------------
 #if defined(_MSC_VER)
 #	pragma comment( lib, "OpenGL32.lib" )
 #endif
 //-----------------------------------------------------------------------------
+https://en.uesp.net/wiki/Arena:Base_Weapons
+https://store.steampowered.com/app/1845670/Islands_of_the_Caliph/
+https://www.youtube.com/watch?v=kXcER1fi8KQ
+
+https://oris-romero.itch.io/pixeltools-pixelator
+https://yellowafterlife.itch.io/pixelfont
+https://matt-lucas.itch.io/level-buddy
+https://led.itch.io/tilemancer
+https://www.youtube.com/channel/UCDExQH9Tfc8DOy8AAmUb2ZQ/videos
+ https://www.youtube.com/watch?v=kXcER1fi8KQ
+https://github.com/warzes/TinyDungeons и ниже
 bool GameAppInit();
 void GameAppUpdate(float deltaTime);
 void GameAppFrame();
@@ -26,15 +24,6 @@ void GameAppClose();
 //-----------------------------------------------------------------------------
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-	//float exponent = 1.5f;
-	//float baseXP = 100.0;
-
-	//for (int i = 0; i < 30; i++)
-	//{
-	//	int t = floor(baseXP * pow((float)i, exponent));
-	//	puts(std::to_string(t).c_str());
-	//}
-
 	Engine engine;
 
 	if (engine.Init())

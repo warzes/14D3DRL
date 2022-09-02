@@ -2,7 +2,7 @@
 
 #include "RenderResource.h"
 #include "Tile.h"
-#include "CoreMath.h"
+#include "MathCore.h"
 
 class Camera;
 struct TilesCell;

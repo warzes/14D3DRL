@@ -3,8 +3,9 @@
 #include "Vertex.h"
 #include "GenMap.h"
 #include "TileMap.h"
-extern int WindowWidth;
-extern int WindowHeight;
+//-----------------------------------------------------------------------------
+int GetWindowWidth();
+int GetWindowHeight();
 //-----------------------------------------------------------------------------
 static constexpr const char* vertexShader = R"(
 #version 330 core
@@ -72,10 +73,10 @@ void GameUI::Close()
 
 void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 {
-	if (m_windowWidth != WindowWidth || m_windowHeight != WindowHeight)
+	if (m_windowWidth != GetWindowWidth() || m_windowHeight != GetWindowHeight())
 	{
-		m_windowWidth = WindowWidth;
-		m_windowHeight = WindowHeight;
+		m_windowWidth = GetWindowWidth();
+		m_windowHeight = GetWindowHeight();
 
 		m_uiHeight = 240.0f;
 		m_uiWidth = m_uiHeight * ((float)m_windowWidth/(float)m_windowHeight);

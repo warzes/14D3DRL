@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DOC", "DOC", "{2E494674-C53
 	ProjectSection(SolutionItems) = preProject
 		Game.md = Game.md
 		History.md = History.md
+		Link.md = Link.md
 		OtherIdea.md = OtherIdea.md
 	EndProjectSection
 EndProject

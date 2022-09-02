@@ -23,4 +23,6 @@ public:
 };
 extern WindowSystem* gWindowSystem;
 
-float GetScreenAspect();
+float GetWindowAspect();
+int GetWindowWidth();
+int GetWindowHeight();

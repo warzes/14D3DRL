@@ -1,4 +1,13 @@
-﻿bool isPointInsideTriangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vertex2, const Vec3f &pt)
+﻿компиляция в web
+	библиотека
+		emcc -c Platform.cpp -Os -Wall
+		emcc -c Core.cpp -Os -Wall
+		emcc -c Renderer.cpp -Os -Wall
+		emcc -c Engine.cpp -Os -Wall
+		emar rcs MiniEngine.a Core.o Platform.o Renderer.o Engine.o
+
+
+bool isPointInsideTriangle(const Vec3f &vertex0, const Vec3f &vertex1, const Vec3f &vertex2, const Vec3f &pt)
 {
 	Vec3f u = vertex1 - vertex0;
 	Vec3f v = vertex2 - vertex0;
