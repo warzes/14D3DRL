@@ -217,9 +217,165 @@ public:
 	constexpr Matrix4(Matrix4&&) = default;
 	constexpr Matrix4(const Matrix4&) = default;
 	constexpr Matrix4(const glm::mat4& m);
+	Matrix4(
+		float  m0, float  m1, float  m2, float  m3,
+		float  m4, float  m5, float  m6, float  m7,
+		float  m8, float  m9, float m10, float m11,
+		float m12, float m13, float m14, float m15)
+	{
+		m[0] = m0;  m[1] = m1;  m[2] = m2;  m[3] = m3;
+		m[4] = m4;  m[5] = m5;  m[6] = m6;  m[7] = m7;
+		m[8] = m8;  m[9] = m9;  m[10] = m10; m[11] = m11;
+		m[12] = m12; m[13] = m13; m[14] = m14; m[15] = m15;
+	}
+
+	const Matrix4 operator+(const Matrix4& M) const
+	{
+		return
+		{
+			m[0] + M[0], m[1] + M[1], m[2] + M[2], m[3] + M[3],
+			m[4] + M[4], m[5] + M[5], m[6] + M[6], m[7] + M[7],
+			m[8] + M[8], m[9] + M[9], m[10] + M[10], m[11] + M[11],
+			m[12] + M[12], m[13] + M[13], m[14] + M[14], m[15] + M[15]
+		};
+	}
+	const Matrix4 operator-(const Matrix4& M) const
+	{
+		return
+		{
+			m[0] - M[0], m[1] - M[1], m[2] - M[2], m[3] - M[3],
+			m[4] - M[4], m[5] - M[5], m[6] - M[6], m[7] - M[7],
+			m[8] - M[8], m[9] - M[9], m[10] - M[10], m[11] - M[11],
+			m[12] - M[12], m[13] - M[13], m[14] - M[14], m[15] - M[15]
+		};
+	}
+	const Matrix4 operator*(const Matrix4& M) const
+	{
+		return
+		{
+			m[0] * M[0] + m[1] * M[4] + m[2] * M[8] + m[3] * M[12],
+			m[0] * M[1] + m[1] * M[5] + m[2] * M[9] + m[3] * M[13],
+			m[0] * M[2] + m[1] * M[6] + m[2] * M[10] + m[3] * M[14],
+			m[0] * M[3] + m[1] * M[7] + m[2] * M[11] + m[3] * M[15],
+			m[4] * M[0] + m[5] * M[4] + m[6] * M[8] + m[7] * M[12],
+			m[4] * M[1] + m[5] * M[5] + m[6] * M[9] + m[7] * M[13],
+			m[4] * M[2] + m[5] * M[6] + m[6] * M[10] + m[7] * M[14],
+			m[4] * M[3] + m[5] * M[7] + m[6] * M[11] + m[7] * M[15],
+			m[8] * M[0] + m[9] * M[4] + m[10] * M[8] + m[11] * M[12],
+			m[8] * M[1] + m[9] * M[5] + m[10] * M[9] + m[11] * M[13],
+			m[8] * M[2] + m[9] * M[6] + m[10] * M[10] + m[11] * M[14],
+			m[8] * M[3] + m[9] * M[7] + m[10] * M[11] + m[11] * M[15],
+			m[12] * M[0] + m[13] * M[4] + m[14] * M[8] + m[15] * M[12],
+			m[12] * M[1] + m[13] * M[5] + m[14] * M[9] + m[15] * M[13],
+			m[12] * M[2] + m[13] * M[6] + m[14] * M[10] + m[15] * M[14],
+			m[12] * M[3] + m[13] * M[7] + m[14] * M[11] + m[15] * M[15]
+		};
+	}
+	const Matrix4 operator*(float f) const
+	{
+		return
+		{
+			m[0] * f, m[1] * f, m[2] * f, m[3] * f,
+			m[4] * f, m[5] * f, m[6] * f, m[7] * f,
+			m[8] * f, m[9] * f, m[10] * f, m[11] * f,
+			m[12] * f, m[13] * f, m[14] * f, m[15] * f
+		};
+	}
+	const Matrix4 operator/(float f) const
+	{
+		return
+		{
+			m[0] / f, m[1] / f, m[2] / f, m[3] / f,
+			m[4] / f, m[5] / f, m[6] / f, m[7] / f,
+			m[8] / f, m[9] / f, m[10] / f, m[11] / f,
+			m[12] / f, m[13] / f, m[14] / f, m[15] / f
+		};
+	}
+
+	Matrix4& operator+=(const Matrix4& M)
+	{
+		m[0] += M[0]; m[1] += M[1]; m[2] += M[2]; m[3] += M[3];
+		m[4] += M[4]; m[5] += M[5]; m[6] += M[6]; m[7] += M[7];
+		m[8] += M[8]; m[9] += M[9]; m[10] += M[10]; m[11] += M[11];
+		m[12] += M[12]; m[13] += M[13]; m[14] += M[14]; m[15] += M[15];
+		return *this;
+	}
+	Matrix4& operator-=(const Matrix4& M)
+	{
+		m[0] -= M[0]; m[1] -= M[1]; m[2] -= M[2]; m[3] -= M[3];
+		m[4] -= M[4]; m[5] -= M[5]; m[6] -= M[6]; m[7] -= M[7];
+		m[8] -= M[8]; m[9] -= M[9]; m[10] -= M[10]; m[11] -= M[11];
+		m[12] -= M[12]; m[13] -= M[13]; m[14] -= M[14]; m[15] -= M[15];
+		return *this;
+	}
+	Matrix4& operator*=(const Matrix4& M)
+	{
+		Set(m[0] * M[0] + m[1] * M[4] + m[2] * M[8] + m[3] * M[12],
+			m[0] * M[1] + m[1] * M[5] + m[2] * M[9] + m[3] * M[13],
+			m[0] * M[2] + m[1] * M[6] + m[2] * M[10] + m[3] * M[14],
+			m[0] * M[3] + m[1] * M[7] + m[2] * M[11] + m[3] * M[15],
+			m[4] * M[0] + m[5] * M[4] + m[6] * M[8] + m[7] * M[12],
+			m[4] * M[1] + m[5] * M[5] + m[6] * M[9] + m[7] * M[13],
+			m[4] * M[2] + m[5] * M[6] + m[6] * M[10] + m[7] * M[14],
+			m[4] * M[3] + m[5] * M[7] + m[6] * M[11] + m[7] * M[15],
+			m[8] * M[0] + m[9] * M[4] + m[10] * M[8] + m[11] * M[12],
+			m[8] * M[1] + m[9] * M[5] + m[10] * M[9] + m[11] * M[13],
+			m[8] * M[2] + m[9] * M[6] + m[10] * M[10] + m[11] * M[14],
+			m[8] * M[3] + m[9] * M[7] + m[10] * M[11] + m[11] * M[15],
+			m[12] * M[0] + m[13] * M[4] + m[14] * M[8] + m[15] * M[12],
+			m[12] * M[1] + m[13] * M[5] + m[14] * M[9] + m[15] * M[13],
+			m[12] * M[2] + m[13] * M[6] + m[14] * M[10] + m[15] * M[14],
+			m[12] * M[3] + m[13] * M[7] + m[14] * M[11] + m[15] * M[15]);
+		return *this;
+	}
+	Matrix4& operator*=(float f)
+	{
+		m[0] *= f; m[1] *= f; m[2] *= f; m[3] *= f;
+		m[4] *= f; m[5] *= f; m[6] *= f; m[7] *= f;
+		m[8] *= f; m[9] *= f; m[10] *= f; m[11] *= f;
+		m[12] *= f; m[13] *= f; m[14] *= f; m[15] *= f;
+		return *this;
+	}
+	Matrix4& operator/=(float f)
+	{
+		m[0] /= f; m[1] /= f; m[2] /= f; m[3] /= f;
+		m[4] /= f; m[5] /= f; m[6] /= f; m[7] /= f;
+		m[8] /= f; m[9] /= f; m[10] /= f; m[11] /= f;
+		m[12] /= f; m[13] /= f; m[14] /= f; m[15] /= f;
+		return *this;
+	}
+
+	operator float* () { return &m[0]; }
+	operator const float* () const { return &m[0]; }
 
 	float& operator[](int Index) { return m[Index]; }
 	const float& operator[](int Index) const { return m[Index]; }
+
+	void Set(const float* f)
+	{
+		m[0] = f[0];  m[1] = f[1];  m[2] = f[2];  m[3] = f[3];
+		m[4] = f[4];  m[5] = f[5];  m[6] = f[6];  m[7] = f[7];
+		m[8] = f[8];  m[9] = f[9];  m[10] = f[10]; m[11] = f[11];
+		m[12] = f[12]; m[13] = f[13]; m[14] = f[14]; m[15] = f[15];
+	}
+	void Set(
+		float  m0, float  m1, float  m2, float  m3,
+		float  m4, float  m5, float  m6, float  m7,
+		float  m8, float  m9, float m10, float m11,
+		float m12, float m13, float m14, float m15)
+	{
+		m[0] = m0;  m[1] = m1;  m[2] = m2;  m[3] = m3;
+		m[4] = m4;  m[5] = m5;  m[6] = m6;  m[7] = m7;
+		m[8] = m8;  m[9] = m9;  m[10] = m10; m[11] = m11;
+		m[12] = m12; m[13] = m13; m[14] = m14; m[15] = m15;
+	}
+	void Set(const Matrix4& M)
+	{
+		m[0] = M[0];  m[1] = M[1];   m[2] = M[2];  m[3] = M[3];
+		m[4] = M[4];  m[5] = M[5];   m[6] = M[6];  m[7] = M[7];
+		m[8] = M[8];  m[9] = M[9];   m[10] = M[10]; m[11] = M[11];
+		m[12] = M[12]; m[13] = M[13]; m[14] = M[14]; m[15] = M[15];
+	}
 
 	void Translate(const Vector3& pos);
 	void Rotate(float angle, const Vector3& rot);
@@ -248,6 +404,19 @@ inline constexpr Matrix4::Matrix4(const glm::mat4& mat)
 	m[13] = mat[3][1];
 	m[14] = mat[3][2];
 	m[15] = mat[3][3];
+}
+
+inline Matrix4 Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+{
+	const float tx = -(right + left) / (right - left),
+		ty = -(top + bottom) / (top - bottom),
+		tz = -(zFar + zNear) / (zFar - zNear);
+
+	return {
+		2 / (right - left), 0,                  0,                  tx,
+		0,                  2 / (top - bottom), 0,                  ty,
+		0,                  0,                 -2 / (zFar - zNear), tz,
+		0,                  0,                  0,                  1 };
 }
 
 inline void Matrix4::Translate(const Vector3& pos)

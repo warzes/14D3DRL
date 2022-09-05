@@ -214,6 +214,7 @@
     <ClCompile Include="PlatformUtility.cpp" />
     <ClCompile Include="PlatformWindowEvents.cpp" />
     <ClCompile Include="PlatformWindowSystem.cpp" />
+    <ClCompile Include="Render2D.cpp" />
     <ClCompile Include="RenderDevice.cpp" />
     <ClCompile Include="RenderResource.cpp" />
     <ClCompile Include="Rng.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="PlatformUtility.h" />
     <ClInclude Include="PlatformWindowEvents.h" />
     <ClInclude Include="PlatformWindowSystem.h" />
+    <ClInclude Include="Render2D.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="RenderResource.h" />
     <ClInclude Include="Rng.h" />

@@ -14,6 +14,7 @@
 // STL Header
 #include <cassert>
 #include <chrono>
+#include <fstream>
 #include <algorithm>
 #include <random>
 #include <string>

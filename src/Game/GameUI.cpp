@@ -3,6 +3,8 @@
 #include "Vertex.h"
 #include "GenMap.h"
 #include "TileMap.h"
+#include "Render2D.h"
+Text::Ptr text;
 //-----------------------------------------------------------------------------
 int GetWindowWidth();
 int GetWindowHeight();
@@ -61,6 +63,11 @@ bool GameUI::Init()
 
 
 	m_ortho = glm::ortho(0.0f, 320.0f, 240.0f, 0.0f, -10.0f, 10.0f);
+
+
+
+	text = Text::Create("../data/fonts/OpenSans-Regular.ttf", 60);
+
 	return true;
 }
 
@@ -166,6 +173,14 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 	m_shaderProgramQuad.SetUniform(m_colorID, colorPlayer);
 	m_vaoQuad.Draw();
 
+
+	text->SetText(L"Hello1230-Привет, мир - яёЁ");
+	text->Draw({ 10, 10, 0 }, Vector3(1));
+
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+
+
+
+
 }

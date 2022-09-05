@@ -99,6 +99,9 @@
     <ClCompile Include="PlatformWindowEvents.cpp">
       <Filter>Engine\Platform</Filter>
     </ClCompile>
+    <ClCompile Include="Render2D.cpp">
+      <Filter>Engine\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -225,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="PlatformWindowEvents.h">
       <Filter>Engine\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Render2D.h">
+      <Filter>Engine\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
