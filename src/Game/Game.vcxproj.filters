@@ -15,7 +15,7 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="RenderDevice.cpp">
+    <ClCompile Include="RenderSystem.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="RenderResource.cpp">
@@ -42,35 +42,26 @@
     <ClCompile Include="PlatformInputSystem.cpp">
       <Filter>Engine\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>GameData</Filter>
-    </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Engine\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMapGeometry.cpp">
-      <Filter>GameData</Filter>
     </ClCompile>
     <ClCompile Include="Offscreen.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>GameData</Filter>
-    </ClCompile>
     <ClCompile Include="Generator.cpp">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClCompile>
     <ClCompile Include="GenMap.cpp">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClCompile>
     <ClCompile Include="Direction.cpp">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClCompile>
     <ClCompile Include="Rng.cpp">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClCompile>
     <ClCompile Include="GenDungeon.cpp">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClCompile>
     <ClCompile Include="ExploringLogic.cpp">
       <Filter>Game\Logic</Filter>
@@ -85,7 +76,7 @@
       <Filter>Game\UI</Filter>
     </ClCompile>
     <ClCompile Include="Hero.cpp">
-      <Filter>GameData\RPG</Filter>
+      <Filter>Game\GameData\RPG</Filter>
     </ClCompile>
     <ClCompile Include="TradeLogic.cpp">
       <Filter>Game\Logic</Filter>
@@ -102,6 +93,15 @@
     <ClCompile Include="Render2D.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Game\TileEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Game\TileEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapGeometry.cpp">
+      <Filter>Game\TileEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -114,7 +114,7 @@
     <ClInclude Include="Engine.h">
       <Filter>Engine\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="RenderDevice.h">
+    <ClInclude Include="RenderSystem.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="RenderResource.h">
@@ -144,17 +144,11 @@
     <ClInclude Include="PlatformInputSystem.h">
       <Filter>Engine\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap.h">
-      <Filter>GameData</Filter>
-    </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Engine\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMapGeometry.h">
-      <Filter>GameData</Filter>
     </ClInclude>
     <ClInclude Include="Offscreen.h">
       <Filter>Game</Filter>
@@ -162,35 +156,29 @@
     <ClInclude Include="Utility.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>GameData</Filter>
-    </ClInclude>
     <ClInclude Include="MathGeometry.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Generator.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="GenMap.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="GenTile.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="Direction.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="GenUtils.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="Rng.h">
-      <Filter>Generator</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="GenDungeon.h">
-      <Filter>Generator</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMapShader.h">
-      <Filter>GameData</Filter>
+      <Filter>Game\Generator</Filter>
     </ClInclude>
     <ClInclude Include="CoreConfig.h" />
     <ClInclude Include="FreeMove.h">
@@ -212,7 +200,7 @@
       <Filter>Game\UI</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>GameData\RPG</Filter>
+      <Filter>Game\GameData\RPG</Filter>
     </ClInclude>
     <ClInclude Include="GameSceneLogic.h">
       <Filter>Game\Logic</Filter>
@@ -231,6 +219,18 @@
     </ClInclude>
     <ClInclude Include="Render2D.h">
       <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapShader.h">
+      <Filter>Game\TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Game\TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Game\TileEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMapGeometry.h">
+      <Filter>Game\TileEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -261,14 +261,8 @@
     <Filter Include="Engine\Math">
       <UniqueIdentifier>{4eab45ba-546f-4965-b226-442ed25676c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameData">
-      <UniqueIdentifier>{93ba2f07-f037-4c81-b400-2e9bad24eb48}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Resource">
       <UniqueIdentifier>{69145b1a-94cc-48a1-bd0e-9a153305450d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Generator">
-      <UniqueIdentifier>{c3314c99-80c9-41ac-b3a0-1a9cf45dc9ec}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Logic">
       <UniqueIdentifier>{e120b160-159e-4c51-b069-69a7e5bc2099}</UniqueIdentifier>
@@ -276,8 +270,17 @@
     <Filter Include="Game\UI">
       <UniqueIdentifier>{b8c45b8f-48d5-4d1b-ac2b-49afc831374f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameData\RPG">
+    <Filter Include="Game\TileEngine">
+      <UniqueIdentifier>{34fcd048-c7d1-4095-a836-cd28e0e7fb09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameData">
+      <UniqueIdentifier>{93ba2f07-f037-4c81-b400-2e9bad24eb48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameData\RPG">
       <UniqueIdentifier>{9b00f826-c74b-4b91-bc7b-5439d8bec521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Generator">
+      <UniqueIdentifier>{c3314c99-80c9-41ac-b3a0-1a9cf45dc9ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

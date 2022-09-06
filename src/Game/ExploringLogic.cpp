@@ -2,8 +2,11 @@
 #include "ExploringLogic.h"
 #include "GameLogic.h"
 #include "Camera.h"
+#include "TileMap.h"
+#include "FreeMove.h"
 
 extern Camera camera;
+extern TileMap tileMap;
 
 void ExploringLogic::Start(GameLogic* logicMgr)
 {
@@ -18,8 +21,24 @@ void ExploringLogic::Stop()
 {
 }
 
-void ExploringLogic::Update()
+void ExploringLogic::Update(float deltaTime)
 {
+	FreeMove(camera, tileMap.GetMapTileData(), deltaTime, true);
+	camera.Update();
+
+	// set tile visible
+	const int px = static_cast<int>(floor(camera.GetPosition().x));
+	const int py = static_cast<int>(floor(camera.GetPosition().z));
+	for (int x = px - 4; x < px + 4; x++)
+	{
+		if (x < 0 || x >= SizeMap) continue;
+		for (int y = py - 4; y < py + 4; y++)
+		{
+			if (y < 0 || y >= SizeMap) continue;
+			tileMap.SetTileVisible(x, y);
+		}
+	}
+
 	m_dist += glm::distance(camera.GetPosition(), m_oldPlayerPos);
 	m_oldPlayerPos = camera.GetPosition();
 

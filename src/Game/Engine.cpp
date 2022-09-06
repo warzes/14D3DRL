@@ -6,21 +6,24 @@ extern void CloseLogFile();
 //-----------------------------------------------------------------------------
 bool IsEngineRun = true;
 //-----------------------------------------------------------------------------
-constexpr float MicrosecondsToSeconds = 1.0f / 1000000.0f;
-std::chrono::steady_clock::time_point startTime;
-int64_t frameTimeCurrent = 0;
-int64_t frameTimeLast = 0;
-int64_t frameTimeDelta = 0;
-float deltaTime = 0.0f;
-//-----------------------------------------------------------------------------
-bool Engine::Init()
+namespace
 {
-	InitLogFile("../log.txt");
+	constexpr float MicrosecondsToSeconds = 1.0f / 1000000.0f;
+	std::chrono::steady_clock::time_point startTime;
+	int64_t frameTimeCurrent = 0;
+	int64_t frameTimeLast = 0;
+	int64_t frameTimeDelta = 0;
+	float deltaTime = 0.0f;
+}
+//-----------------------------------------------------------------------------
+bool Engine::Init(const EngineCreateInfo& createInfo)
+{
+	InitLogFile(createInfo.LogFile);
 
-	if (!m_window.Create({}))
+	if (!m_window.Create(createInfo.Window))
 		return false;
 
-	if (!m_renderDevice.Create())
+	if (!m_renderSystem.Create())
 		return false;
 
 	startTime = std::chrono::high_resolution_clock::now();
@@ -31,7 +34,7 @@ bool Engine::Init()
 void Engine::Close()
 {
 	m_textureManager.Destroy();
-	m_renderDevice.Destroy();
+	m_renderSystem.Destroy();
 	m_window.Destroy();
 	CloseLogFile();
 }
@@ -49,12 +52,12 @@ bool Engine::Update()
 //-----------------------------------------------------------------------------
 void Engine::BeginFrame()
 {
-	m_renderDevice.Clear();
+	m_renderSystem.Clear();
 }
 //-----------------------------------------------------------------------------
 void Engine::EndFrame()
 {
-	m_renderDevice.Swap();
+	m_renderSystem.Swap();
 }
 //-----------------------------------------------------------------------------
 float Engine::GetDeltaTime() const

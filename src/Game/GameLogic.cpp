@@ -26,9 +26,9 @@ void GameLogic::SetLogicStage(GameLogicStage stage)
 	m_currentSceneLogic->Start(this);
 }
 //-----------------------------------------------------------------------------
-void GameLogic::Update()
+void GameLogic::Update(float deltaTime)
 {
-	m_currentSceneLogic->Update();
+	m_currentSceneLogic->Update(deltaTime);
 }
 //-----------------------------------------------------------------------------
 void GameLogic::Draw()

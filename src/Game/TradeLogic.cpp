@@ -12,7 +12,7 @@ void TradeLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void TradeLogic::Update()
+void TradeLogic::Update(float deltaTime)
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }

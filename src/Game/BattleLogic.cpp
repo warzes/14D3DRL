@@ -12,7 +12,7 @@ void BattleLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void BattleLogic::Update()
+void BattleLogic::Update(float deltaTime)
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }

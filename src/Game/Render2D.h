@@ -13,7 +13,7 @@ public:
 	static Text::Ptr Create(const std::string& fontFileName, uint32_t fontSize);
 
 	void SetText(const std::wstring& text);
-	void Draw(const Vector3& position, const Vector3& color);
+	void Draw(const Vector3& position, const Vector3& color, const glm::mat4& orthoMat);
 
 	//private:
 	Text() = default;

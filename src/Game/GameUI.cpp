@@ -175,12 +175,8 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 
 
 	text->SetText(L"Hello1230-Привет, мир - яёЁ");
-	text->Draw({ 10, 10, 0 }, Vector3(1));
+	text->Draw({ 10, 10, 0 }, Vector3(0.1, 0.5, 1), m_ortho);
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-
-
-
-
 }

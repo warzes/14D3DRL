@@ -12,7 +12,7 @@ void TrapLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void TrapLogic::Update()
+void TrapLogic::Update(float deltaTime)
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }

@@ -1,14 +1,20 @@
 #pragma once
 
 #include "PlatformWindowSystem.h"
-#include "RenderDevice.h"
+#include "RenderSystem.h"
 #include "Render2D.h"
 #include "TextureManager.h"
+
+struct EngineCreateInfo
+{
+	WindowSystemCreateInfo Window;
+	const char* LogFile = "../log.txt";
+};
 
 class Engine
 {
 public:
-	bool Init();
+	bool Init(const EngineCreateInfo& createInfo);
 	void Close();
 
 	bool Update();
@@ -19,6 +25,6 @@ public:
 
 private:
 	WindowSystem m_window;
-	RenderDevice m_renderDevice;
+	RenderSystem m_renderSystem;
 	TextureManager m_textureManager;
 };

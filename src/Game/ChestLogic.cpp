@@ -12,7 +12,7 @@ void ChestLogic::Stop()
 {
 }
 //-----------------------------------------------------------------------------
-void ChestLogic::Update()
+void ChestLogic::Update(float deltaTime)
 {
 	m_logicMgr->SetLogicStage(GameLogicStage::Exploring);
 }

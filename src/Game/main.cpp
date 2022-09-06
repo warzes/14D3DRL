@@ -26,7 +26,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
 	Engine engine;
 
-	if (engine.Init())
+	if (engine.Init({}))
 	{
 		if (GameAppInit())
 		{

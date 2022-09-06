@@ -22,7 +22,7 @@ public:
 
 	void SetLogicStage(GameLogicStage stage);
 
-	void Update();
+	void Update(float deltaTime);
 	void Draw();
 	void DrawUI();
 
