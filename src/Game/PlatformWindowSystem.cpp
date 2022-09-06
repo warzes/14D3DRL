@@ -162,7 +162,7 @@ inline void initDpi()
 	if (shcore)  FreeLibrary(shcore);
 }
 //-----------------------------------------------------------------------------
-inline void dpiChanged(HWND hWnd, LPRECT proposed_win_rect)
+inline void dpiChanged(HWND hwnd, LPRECT proposed_win_rect)
 {
 	// called on WM_DPICHANGED, which will only be sent to the application if sapp_desc.high_dpi is true and the Windows version is recent enough to support DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 	assert(HighDpi);
@@ -170,16 +170,16 @@ inline void dpiChanged(HWND hWnd, LPRECT proposed_win_rect)
 	if (!user32)
 		return;
 
-	typedef UINT(WINAPI* GETDPIFORWINDOW_T)(HWND hwnd);
+	typedef UINT(WINAPI* GETDPIFORWINDOW_T)(HWND);
 	GETDPIFORWINDOW_T fn_getdpiforwindow = (GETDPIFORWINDOW_T)(void*)GetProcAddress(user32, "GetDpiForWindow");
 	if (fn_getdpiforwindow)
 	{
-		UINT dpix = fn_getdpiforwindow(hWnd);
+		UINT dpix = fn_getdpiforwindow(hwnd);
 		// NOTE: for high-dpi apps, mouse_scale remains one
 		Dpi.window_scale = (float)dpix / 96.0f;
 		Dpi.content_scale = Dpi.window_scale;
 		dpiScale = Dpi.window_scale;
-		SetWindowPos(hWnd, 0,
+		SetWindowPos(hwnd, 0,
 			proposed_win_rect->left,
 			proposed_win_rect->top,
 			proposed_win_rect->right - proposed_win_rect->left,
@@ -431,7 +431,7 @@ bool registerWindowClass()
 	wc.hInstance = hInstance;
 	wc.lpszClassName = CLASS_NAME;
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
+	wc.hIcon = nullptr;
 
 	const ATOM classAtom = RegisterClass(&wc);
 	if (!classAtom)

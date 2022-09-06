@@ -2,12 +2,14 @@
 
 #if defined(_MSC_VER)
 #	pragma warning(disable : 4514)
-#	pragma warning(disable : 4626)
+#	pragma warning(disable : 4625) // copy constructor was implicitly defined as deleted
+#	pragma warning(disable : 4626) // assignment operator was implicitly defined as deleted
 #	pragma warning(disable : 4820)
-#	pragma warning(disable : 5027)
+#	pragma warning(disable : 5026) // move constructor was implicitly defined as deleted
+#	pragma warning(disable : 5027) // move assignment operator was implicitly defined as deleted
 #	pragma warning(disable : 5045)
 #	pragma warning(push, 0)
-#	pragma warning(disable : 5039)
+#	pragma warning(disable : 5039) // pointer or reference to potentially throwing function passed to extern C function under -EHc. Undefined behavior may occur if this function throws an exception.
 #endif
 
 //=============================================================================
@@ -28,8 +30,37 @@
 //=============================================================================
 // WIN32
 #if defined(_WIN32)
+#	ifdef WINVER
+#		undef WINVER
+#	endif
+#	define WINVER 0x0601
+#	ifdef _WIN32_WINNT
+#		undef _WIN32_WINNT
+#	endif
+#	define _WIN32_WINNT 0x0601
 #	define WIN32_LEAN_AND_MEAN
 #	define NOMINMAX
+#	define NOGDICAPMASKS
+#	define NOMENUS
+#	define NOICONS
+#	define NOKEYSTATES
+#	define NORASTEROPS
+#	define OEMRESOURCE
+#	define NOATOM
+#	define NOMEMMGR
+#	define NOMETAFILE
+#	define NOOPENFILE
+#	define NOSCROLL
+#	define NOSERVICE
+#	define NOSOUND
+#	define NOWH
+#	define NOCOMM
+#	define NOKANJI
+#	define NOHELP
+#	define NOPROFILER
+#	define NODEFERWINDOWPOS
+#	define NOMCX
+#	define NOCRYPT
 #	include <windows.h>
 //#	include <shellapi.h>
 #endif // _WIN32
