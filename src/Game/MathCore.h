@@ -34,10 +34,10 @@ public:
 	// TODO: проверить эти операции и отрефакторить
 	[[nodiscard]] bool operator==(const Vector2& v) const { return math::Equal(x, v.x) && math::Equal(y, v.y); }
 	[[nodiscard]] bool operator!=(const Vector2& v) const { return !math::Equal(x, v.x) || !math::Equal(y, v.y); }
-	[[nodiscard]] bool operator>(const Vector2& v) const { return x > v.x && y > v.y; }
-	[[nodiscard]] bool operator<(const Vector2& v) const { return x < v.x && y < v.y; }
-	[[nodiscard]] bool operator>=(const Vector2& v) const { return *this > v || *this == v; }
-	[[nodiscard]] bool operator<=(const Vector2 & v) const { return *this < v || *this == v; }
+	//[[nodiscard]] bool operator>(const Vector2& v) const { return x > v.x && y > v.y; }
+	//[[nodiscard]] bool operator<(const Vector2& v) const { return x < v.x && y < v.y; }
+	//[[nodiscard]] bool operator>=(const Vector2& v) const { return *this > v || *this == v; }
+	//[[nodiscard]] bool operator<=(const Vector2 & v) const { return *this < v || *this == v; }
 	
 	Vector2 operator+(float f) const { return { x + f, y + f }; }
 	Vector2 operator+(const Vector2& v) const { return { x + v.x, y + v.y }; }	
@@ -125,10 +125,10 @@ public:
 	// TODO: проверить эти операции и отрефакторить
 	[[nodiscard]] bool operator==(const Vector3& v) const { return math::Equal(x, v.x) && math::Equal(y, v.y) && math::Equal(z, v.z); }
 	[[nodiscard]] bool operator!=(const Vector3& v) const { return !math::Equal(x, v.x) || !math::Equal(y, v.y) || !math::Equal(z, v.z); }
-	[[nodiscard]] bool operator>(const Vector3& v) const { return x > v.x && y > v.y && z > v.z; }
-	[[nodiscard]] bool operator<(const Vector3& v) const { return x < v.x && y < v.y && z < v.z; }
-	[[nodiscard]] bool operator>=(const Vector3& v) const { return *this > v || *this == v; }
-	[[nodiscard]] bool operator<=(const Vector3& v) const { return *this < v || *this == v; }
+	//[[nodiscard]] bool operator>(const Vector3& v) const { return x > v.x && y > v.y && z > v.z; }
+	//[[nodiscard]] bool operator<(const Vector3& v) const { return x < v.x && y < v.y && z < v.z; }
+	//[[nodiscard]] bool operator>=(const Vector3& v) const { return *this > v || *this == v; }
+	//[[nodiscard]] bool operator<=(const Vector3& v) const { return *this < v || *this == v; }
 
 	Vector3 operator+(float f) const { return { x + f, y + f, z + f }; }
 	Vector3 operator+(const Vector3& v) const { return { x + v.x, y + v.y, z + v.z }; }

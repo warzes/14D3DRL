@@ -6,7 +6,9 @@
 #	pragma comment( lib, "OpenGL32.lib" )
 #endif
 //-----------------------------------------------------------------------------
-https://www.youtube.com/channel/UCNz9gHQeGOC26GVwPQzr9EQ/videos
+менеджер сущностей
+описать боевку
+//https://www.youtube.com/channel/UCNz9gHQeGOC26GVwPQzr9EQ/videos
 //https://en.uesp.net/wiki/Arena:Base_Weapons
 //https://store.steampowered.com/app/1845670/Islands_of_the_Caliph/
 //https://www.youtube.com/watch?v=kXcER1fi8KQ

@@ -22,6 +22,8 @@ inline bool CheckCollisionBoxes(const BoundingBox& box1, const BoundingBox& box2
 
 	return true;
 #else
-	return box1.min <= box2.max && box1.max >= box2.min;
+	//return box1.min <= box2.max && box1.max >= box2.min;
+	return (box1.min.x <= box2.max.x && box1.min.y <= box2.max.y && box1.min.z <= box2.max.z)
+		&& (box1.max.x >= box2.min.x && box1.max.y >= box2.min.y && box1.max.z >= box2.min.z);
 #endif
 }

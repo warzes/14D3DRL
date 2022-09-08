@@ -2,6 +2,7 @@
 #include "Offscreen.h"
 #include "Vertex.h"
 #include "RenderResource.h"
+// TODO: https://www.shadertoy.com/view/MtjGRd
 //-----------------------------------------------------------------------------
 // Game Boy Palette Mapping
 static constexpr const char* GameBoyPaletteShader = R"(
@@ -168,13 +169,79 @@ void main()
 }
 )";
 //-----------------------------------------------------------------------------
+#if DitherShader
+static constexpr const char* PaletteVertexShader = R"(
+#version 330 core
+
+layout(location = 0) in vec2 vertexPosition;
+layout (location = 1) in vec2 texCoords;
+
+out vec2 UV;
+
+void main()
+{
+	gl_Position = vec4(vertexPosition.x, vertexPosition.y, 0.0, 1.0); 
+	UV = texCoords;
+}
+)";
+#endif
+//-----------------------------------------------------------------------------
+#if DitherShader
+static constexpr const char* PalleteFragmentShader = R"(
+#version 330 core
+
+in vec2 UV;
+
+out vec4 fragColor;
+
+uniform sampler2D screenTexture;
+
+const float PIXEL_FACTOR = 320.; // Lower num - bigger pixels (this will be the screen width)
+const float COLOR_FACTOR = 4.;   // Higher num - higher colors quality
+
+const mat4 ditherTable = mat4(
+    -4.0, 0.0, -3.0, 1.0,
+    2.0, -2.0, 3.0, -1.0,
+    -3.0, 1.0, -4.0, 0.0,
+    3.0, -1.0, 2.0, -2.0
+);
+
+void main()
+{
+	float PixelsX = 320.0;
+	float PixelsY = 240.0;
+	vec2 pos;
+	pos.x = floor(UV.x * PixelsX) / PixelsX;
+	pos.y = floor(UV.y * PixelsY) / PixelsY;
+
+   	// Get source color
+    vec3 col = texture(screenTexture, pos).xyz;     
+
+    // Dither
+    col += ditherTable[int( pos.x ) % 4][int( pos.y ) % 4] * 0.005; // last number is dithering strength
+
+    // Reduce colors
+    col = floor(col * COLOR_FACTOR) / COLOR_FACTOR;
+   
+    // Output to screen
+    fragColor = vec4(col,1.);
+}
+)";
+#endif
+//-----------------------------------------------------------------------------
 int GetWindowWidth();
 int GetWindowHeight();
 //-----------------------------------------------------------------------------
 bool Offscreen::Init()
 {
 	//m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, Palette16FragmentShader);
+#if DitherShader
+	m_shaderProgramQuad.CreateFromMemories(PaletteVertexShader, PalleteFragmentShader);
+#else
 	m_shaderProgramQuad.CreateFromMemories(OffscreenVertexShader, OffscreenFragmentShader);
+#endif
+
+
 
 	m_shaderProgramQuad.Bind();
 	m_shaderProgramQuad.SetUniform("screenTexture", 0);

@@ -2,8 +2,6 @@
 #include "Camera.h"
 #include "GameInput.h"
 //-----------------------------------------------------------------------------
-extern float GetWindowAspect();
-//-----------------------------------------------------------------------------
 void Camera::MoveForward(float deltaTime, float speedMod)
 {
 	m_position += m_front * (m_movementSpeed * speedMod * deltaTime);

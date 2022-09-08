@@ -4,9 +4,6 @@
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb/stb_truetype.h>
 //-----------------------------------------------------------------------------
-int GetWindowWidth();
-int GetWindowHeight();
-//-----------------------------------------------------------------------------
 class Font
 {
 public:
