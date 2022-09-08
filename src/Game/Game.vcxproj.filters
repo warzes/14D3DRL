@@ -232,6 +232,7 @@
     <ClInclude Include="TileMapGeometry.h">
       <Filter>Game\TileEngine</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalVars.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

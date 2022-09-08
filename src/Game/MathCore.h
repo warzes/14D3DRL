@@ -1,6 +1,21 @@
 #pragma once
 
 //=============================================================================
+// Math core
+//=============================================================================
+namespace math
+{
+	constexpr double RoundingError64 = 0.00000001;   // 1.0e-8 (alt. DBL_EPSILON)
+	constexpr float RoundingError    = 0.000001f;    // 1.0e-6 (alt. FLT_EPSILON)
+
+	inline bool Equal(float A, float B)
+	{
+		return fabs(A - B) < RoundingError;
+	}
+
+} // namespace math
+
+//=============================================================================
 // Vector2
 //=============================================================================
 
@@ -16,21 +31,30 @@ public:
 	constexpr Vector2& operator=(Vector2&&) = default;
 	constexpr Vector2& operator=(const Vector2&) = default;
 
-	//bool operator==(const Vector2& v);
-	//bool operator!=(const Vector2& v);
+	// TODO: проверить эти операции и отрефакторить
+	[[nodiscard]] bool operator==(const Vector2& v) const { return math::Equal(x, v.x) && math::Equal(y, v.y); }
+	[[nodiscard]] bool operator!=(const Vector2& v) const { return !math::Equal(x, v.x) || !math::Equal(y, v.y); }
+	[[nodiscard]] bool operator>(const Vector2& v) const { return x > v.x && y > v.y; }
+	[[nodiscard]] bool operator<(const Vector2& v) const { return x < v.x && y < v.y; }
+	[[nodiscard]] bool operator>=(const Vector2& v) const { return *this > v || *this == v; }
+	[[nodiscard]] bool operator<=(const Vector2 & v) const { return *this < v || *this == v; }
 	
 	Vector2 operator+(float f) const { return { x + f, y + f }; }
-	Vector2 operator+(const Vector2& v) const { return { x + v.x, y + v.y }; }
+	Vector2 operator+(const Vector2& v) const { return { x + v.x, y + v.y }; }	
 	Vector2 operator-() const { return { -x, -y }; }
 	Vector2 operator-(float f) const { return { x - f, y - f }; }
-	Vector2 operator-(const Vector2& v) const { return { x - v.x, y - v.y }; }
+	Vector2 operator-(const Vector2& v) const { return { x - v.x, y - v.y }; }	
 	Vector2 operator*(float f) const { return { x * f, y * f }; }
-	Vector2 operator*(const Vector2& v) const { return { x * v.x, y * v.y }; }
+	Vector2 operator*(const Vector2& v) const { return { x * v.x, y * v.y }; }	
 	Vector2 operator/(float f) const { return { x / f, y / f }; }
+	Vector2 operator/(const Vector2& v) const { return { x / v.x, y / v.y }; }
+
 	Vector2& operator+=(const Vector2& v) { x += v.x; y += v.y; return(*this); }
 	Vector2& operator-=(const Vector2& v) { x -= v.x; y -= v.y; return(*this); }
 	Vector2& operator*=(float f) { x *= f; y *= f; return(*this); }
+	Vector2& operator*=(const Vector2& v) { x *= v.x; y *= v.y; return(*this); }
 	Vector2& operator/=(float f) { x /= f; y /= f; return(*this); }
+	Vector2& operator/=(const Vector2& v) { x /= v.x; y /= v.y; return(*this); }
 
 	float* operator&() { return (float*)this; };
 	operator float*() { return &x; }
@@ -80,6 +104,8 @@ inline float Vector2::DotProduct(const Vector2& v) const
 inline Vector2 operator*(float lhs, const Vector2& rhs) { return rhs * lhs; }
 inline Vector2 operator+(float lhs, const Vector2& rhs) { return rhs + lhs; }
 
+
+
 //=============================================================================
 // Vector3
 //=============================================================================
@@ -96,8 +122,13 @@ public:
 	constexpr Vector3& operator=(Vector3&&) = default;
 	constexpr Vector3& operator=(const Vector3&) = default;
 
-	//bool operator==(const Vector3& v);
-	//bool operator!=(const Vector3& v);
+	// TODO: проверить эти операции и отрефакторить
+	[[nodiscard]] bool operator==(const Vector3& v) const { return math::Equal(x, v.x) && math::Equal(y, v.y) && math::Equal(z, v.z); }
+	[[nodiscard]] bool operator!=(const Vector3& v) const { return !math::Equal(x, v.x) || !math::Equal(y, v.y) || !math::Equal(z, v.z); }
+	[[nodiscard]] bool operator>(const Vector3& v) const { return x > v.x && y > v.y && z > v.z; }
+	[[nodiscard]] bool operator<(const Vector3& v) const { return x < v.x && y < v.y && z < v.z; }
+	[[nodiscard]] bool operator>=(const Vector3& v) const { return *this > v || *this == v; }
+	[[nodiscard]] bool operator<=(const Vector3& v) const { return *this < v || *this == v; }
 
 	Vector3 operator+(float f) const { return { x + f, y + f, z + f }; }
 	Vector3 operator+(const Vector3& v) const { return { x + v.x, y + v.y, z + v.z }; }

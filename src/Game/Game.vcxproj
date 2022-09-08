@@ -237,6 +237,7 @@
     <ClInclude Include="..\3rdparty\glad\wgl.h" />
     <ClInclude Include="BattleLogic.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="GlobalVars.h" />
     <ClInclude Include="MathCollision.h" />
     <ClInclude Include="CoreConfig.h" />
     <ClInclude Include="MathCore.h" />

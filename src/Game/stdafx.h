@@ -129,3 +129,4 @@
 #endif
 
 #include "CoreConfig.h"
+#include "GlobalVars.h"
