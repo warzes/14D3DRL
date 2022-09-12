@@ -5,9 +5,6 @@
 #if defined(_MSC_VER)
 #	pragma comment( lib, "OpenGL32.lib" )
 #endif
-//-----------------------------------------------------------------------------
-менеджер сущностей
-описать боевку
 //https://www.youtube.com/channel/UCNz9gHQeGOC26GVwPQzr9EQ/videos
 //https://en.uesp.net/wiki/Arena:Base_Weapons
 //https://store.steampowered.com/app/1845670/Islands_of_the_Caliph/
@@ -24,6 +21,8 @@ bool GameAppInit();
 void GameAppUpdate(float deltaTime);
 void GameAppFrame();
 void GameAppClose();
+
+
 //-----------------------------------------------------------------------------
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {

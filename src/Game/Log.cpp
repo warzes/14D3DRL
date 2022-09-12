@@ -28,19 +28,19 @@ void LogPrint(const char* message)
 //-----------------------------------------------------------------------------
 void LogWarning(const char* message)
 {
-	const std::string text = "WARNING: " + std::string(message);
+	const std::string text = "[ \033[33mWARNING\033[0m ] : " + std::string(message);
 	LogPrint(text.c_str());
 }
 //-----------------------------------------------------------------------------
 void LogError(const char* message)
 {
-	const std::string text = "ERROR: " + std::string(message);
+	const std::string text = "[ \033[31mERROR\033[0m   ] : " + std::string(message);
 	LogPrint(text.c_str());
 }
 //-----------------------------------------------------------------------------
 void LogFatal(const char* message)
 {
-	const std::string text = "FATAL: " + std::string(message);
+	const std::string text = "[ \033[31mFATAL\033[0m   ] : " + std::string(message);
 	LogPrint(text.c_str());
 	IsEngineRun = false;
 }
