@@ -7,8 +7,8 @@
 class Font
 {
 public:
-	const uint32_t size = 60;
-	const std::string fontFileName = "../fonts/OpenSans-Regular.ttf";
+	uint32_t size = 60;
+	std::string fontFileName = "../fonts/OpenSans-Regular.ttf";
 	const uint32_t atlasWidth = 1024;
 	const uint32_t atlasHeight = 1024;
 	//const uint32_t oversampleX = 2;
@@ -105,11 +105,15 @@ Font* getFont(const std::string& fontFileName, uint32_t fontSize)
 	if (!font)
 	{
 		Font font_;
-		//TODO: переместить в Font
+		font_.size = fontSize;
+		font_.fontFileName = fontFileName;
 
 		std::ifstream file(fontFileName, std::ios::binary | std::ios::ate);
-		//if (!file.is_open())
-		//   panic("Failed to open file ", path);
+		if (!file.is_open())
+		{
+			LogError("Failed to open file " + fontFileName);
+			return nullptr;
+		}
 
 		const auto size = file.tellg();
 		file.seekg(0, std::ios::beg);
@@ -138,6 +142,8 @@ Font* getFont(const std::string& fontFileName, uint32_t fontSize)
 
 		Texture2DCreateInfo createInfo;
 		createInfo.format = TexelsFormat::R_U8;
+		//createInfo.minFilter = TextureMinFilter::Linear;
+		//createInfo.magFilter = TextureMagFilter::Linear;
 		createInfo.width = font_.atlasWidth;
 		createInfo.height = font_.atlasHeight;
 		createInfo.depth = 1;
@@ -156,22 +162,19 @@ Font* getFont(const std::string& fontFileName, uint32_t fontSize)
 	return font;
 }
 //-----------------------------------------------------------------------------
-Text::Ptr Text::Create(const std::string& fontFileName, uint32_t fontSize)
+bool Text::Create(const std::string& fontFileName, uint32_t fontSize)
 {
 	Font* font = getFont(fontFileName, fontSize);
-
-	//Text::Ptr text = std::shared_ptr<Text>(new Text());// TODO: какого именно тут не работает?
-	Text::Ptr text = std::make_shared<Text>();
-
-	if (!font || !text->create(font))
+	if (!font || !create(font))
 	{
 		LogError("Text not create!");
+		return false;
 	}
 
-	return text;
+	return true;
 }
 //-----------------------------------------------------------------------------
-Text::~Text()
+void Text::Destroy()
 {
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &vertexBuffer);

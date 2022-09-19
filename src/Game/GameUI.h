@@ -20,6 +20,7 @@ private:
 	UniformVariable m_colorID;
 
 	glm::mat4 m_ortho;
+	glm::mat4 m_orthoUI;
 
 	int m_windowWidth = 0;
 	int m_windowHeight = 0;

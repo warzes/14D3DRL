@@ -4,7 +4,7 @@
 #include "GenMap.h"
 #include "TileMap.h"
 #include "Render2D.h"
-Text::Ptr text;
+Text text;
 //-----------------------------------------------------------------------------
 int GetWindowWidth();
 int GetWindowHeight();
@@ -63,16 +63,18 @@ bool GameUI::Init()
 
 
 	m_ortho = glm::ortho(0.0f, 320.0f, 240.0f, 0.0f, -10.0f, 10.0f);
+	m_orthoUI = glm::ortho(0.0f, 320.0f*4, 240.0f*4, 0.0f, -10.0f, 10.0f);
 
 
 
-	text = Text::Create("../data/fonts/OpenSans-Regular.ttf", 60);
+	text.Create("../data/fonts/OpenSans-Regular.ttf", 24*4);
 
 	return true;
 }
 
 void GameUI::Close()
 {
+	text.Destroy();
 	m_vaoQuad.Destroy();
 	m_vertexBufQuad.Destroy();
 	m_shaderProgramQuad.Destroy();
@@ -86,10 +88,10 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 		m_windowHeight = GetWindowHeight();
 
 		m_uiHeight = 240.0f;
-		m_uiWidth = m_uiHeight * ((float)m_windowWidth/(float)m_windowHeight);
-		
-
+		m_uiWidth = m_uiHeight * ((float)m_windowWidth/(float)m_windowHeight);		
 		m_ortho = glm::ortho(0.0f, m_uiWidth, m_uiHeight, 0.0f, -10.0f, 10.0f);
+
+		m_orthoUI = glm::ortho(0.0f, m_uiWidth*4, m_uiHeight * 4, 0.0f, -10.0f, 10.0f);
 	}
 
 	glDisable(GL_DEPTH_TEST);
@@ -174,8 +176,8 @@ void GameUI::Draw(const glm::vec3& newPlayerPos, const TileMap& map)
 	m_vaoQuad.Draw();
 
 
-	text->SetText(L"Hello1230-Привет, мир - яёЁ");
-	text->Draw({ 10, 10, 0 }, Vector3(0.1, 0.5, 1), m_ortho);
+	text.SetText(L"Hello1230-Привет, мир - яёЁ");
+	text.Draw({ 10, 10, 0 }, Vector3(0.1, 0.5, 1), m_orthoUI);
 
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
