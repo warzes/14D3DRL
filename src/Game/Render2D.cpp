@@ -225,10 +225,7 @@ void Text::Draw(const Vector3& position, const Vector3& color, const glm::mat4& 
 	if (m_text.empty() || !m_font || !m_font->texture.IsValid())
 		return;
 
-	// TODO:
-	//glm::mat4 m_ortho = glm::ortho(0.0f, 320.0f, 240.0f, 0.0f, -10.0f, 10.0f);
-	glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
-	glm::mat4 pm = orthoMat * translate;
+	const glm::mat4 pm = orthoMat * glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, position.z));
 
 	cacheShader.Bind();
 	cacheShader.SetUniform(m_idAttributeTextColor, { color.x, color.y, color.z });
